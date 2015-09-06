@@ -16,8 +16,8 @@ describe Aspects do
   end
 
   it 'Cuando le paso una clase la agrega a su array de objetos' do
-    Aspects.on Aspects do end
-    Aspects.objetos.count.should eq(1)
+    Aspects.on Aspects,Aspects do end
+    Aspects.objetos.count.should eq(2)
     Aspects.objetos.first.should be(Aspects)
   end
 
@@ -27,4 +27,8 @@ describe Aspects do
     Aspects.objetos.first.should be(Aspects)
   end
 
+
+  it 'lala' do
+   puts /Aspects/.class != Regexp
+  end
 end
