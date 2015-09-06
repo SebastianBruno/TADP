@@ -15,6 +15,9 @@ class Aspects
 
     #Valida los parametros pasados
     raise ArgumentError if objetos.count.eql? 0 or bloque.nil?
+
+    #Ejecuta el proc en este contexto
+    instance_eval &bloque
   end
 
   def self.guardar_objetos(*args)

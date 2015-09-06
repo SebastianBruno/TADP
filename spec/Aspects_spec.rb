@@ -27,8 +27,15 @@ describe Aspects do
     Aspects.objetos.first.should be(Aspects)
   end
 
+  it 'Cuando le paso un regex que no matchea con nada, tira ArgumentError' do
+    expect {
+      Aspects.on /NoMatchea/,/NoMatcheaNinguno/ do end
+    }.to raise_error ArgumentError
+  end
 
-  it 'lala' do
-   puts /Aspects/.class != Regexp
+  it 'asd' do
+    Aspects.on Aspects do
+      puts objetos.count
+    end
   end
 end
