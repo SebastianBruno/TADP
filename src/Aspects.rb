@@ -22,7 +22,7 @@ class Aspects
 
   def self.guardar_objetos(*args)
     args.each do |objeto|
-      if objeto.class != Regexp then
+      if objeto.class != Regexp
         #Si no es una expresion regular lo agrega directo
         objetos << objeto
       else

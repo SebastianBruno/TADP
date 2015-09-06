@@ -16,8 +16,8 @@ describe Aspects do
   end
 
   it 'Cuando le paso una clase la agrega a su array de objetos' do
-    Aspects.on Aspects,Aspects do end
-    Aspects.objetos.count.should eq(2)
+    Aspects.on Aspects do end
+    Aspects.objetos.count.should eq(1)
     Aspects.objetos.first.should be(Aspects)
   end
 
@@ -29,13 +29,8 @@ describe Aspects do
 
   it 'Cuando le paso un regex que no matchea con nada, tira ArgumentError' do
     expect {
-      Aspects.on /NoMatchea/,/NoMatcheaNinguno/ do end
+      Aspects.on /NoMatchea/,/TampocoMatchea/ do end
     }.to raise_error ArgumentError
   end
 
-  it 'asd' do
-    Aspects.on Aspects do
-      puts objetos.count
-    end
-  end
 end
