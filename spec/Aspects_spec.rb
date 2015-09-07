@@ -43,4 +43,10 @@ describe Aspects do
       expect(Aspects.objetos.first).to eq(Aspects)
   end
 
+  it 'Cuando le paso varias listas de metodos al where, me devuelve la intereseccion de todas' do
+    methods = Aspects.methods(false)
+
+    expect(Aspects.where([methods[0]], [methods[0], methods[1]])).to eq([methods[0]])
+  end
+
 end

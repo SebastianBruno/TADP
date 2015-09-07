@@ -38,4 +38,14 @@ class Aspects
     end
   end
 
+  def self.where(*args)
+    metodos_totales = [ args[0][0] ]
+
+    args.each { |metodos_condicion|
+        metodos_totales = metodos_totales & metodos_condicion
+    }
+
+    return metodos_totales
+  end
+
 end
