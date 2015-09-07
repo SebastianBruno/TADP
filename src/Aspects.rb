@@ -38,4 +38,32 @@ class Aspects
     end
   end
 
+def self.has_parameters(amount, status = 'everything')
+    if status == 'mandatory'
+    
+    #Antes de los parameters habría que meter de alguna forma al metodo que va a llamar a la condicion
+      parameters.select do |param| param.first == :req end.size == amount
+    elsif status == 'optional'
+      parameters.select do |param| param.first == :opt end.size == amount
+    elsif status == 'everything'
+      parameters.size == amount
+    end
+  end
+
+  def self.cumple_condiciones(metodo, *condiciones)
+    condiciones.all? { |condicion| metodo condicion}
+  end
+
+  def self.where(*condiciones)
+    if(obj.class == Class)
+      @metodos = obj.instance_methods
+    else
+      @metodos = obj.methods
+    end
+    
+    @metodos.select do |metodo| cumple_condiciones(metodo, condiciones) end
+  end
+
+end
+
 end
