@@ -51,14 +51,49 @@ describe Aspects do
       expect(metodos.count).to eq(2)
   end
 
-  it 'sadasda' do
-    metodos = Aspects.on Aspects do
-      where has_parameters(0, 'optional')
+  it 'Cuando le paso nil a name, devuelve ArgumentError' do
+    expect {
+      Aspects.on /TestClass/ do
+        where name(nil)
+      end
+    }.to raise_error ArgumentError
+  end
+
+  it 'Obtener un metodo con dos parametros obligratorios de TestClass' do
+    metodos = Aspects.on TestClass do
+      where has_parameters(2, mandatory)
     end
-    metodos.each do |met|
-      puts(met)
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0]).to eq(:metodo_con_dos_parametros)
+  end
+
+  it 'Obtener un metodo con tres parametros obligatorios de TestClass' do
+    metodos = Aspects.on TestClass do
+      where has_parameters(3, mandatory)
     end
-    expect(metodos.count).to eq(0)
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0]).to eq(:metodo_con_tres_parametros)
+  end
+
+  it 'Obtener dos metodos que no reciben parametros de TestClass' do
+    metodos = Aspects.on TestClass do
+      where has_parameters(0)
+    end
+
+    expect(metodos.count).to eq(2)
+    expect(metodos[0]).to eq(:un_metodo)
+    expect(metodos[1]).to eq(:otro_metodo)
+  end
+
+  it 'Obtener un metodo con tres parametros opcionales de TestClass' do
+    metodos = Aspects.on TestClass do
+      where has_parameters(3, optional)
+    end
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
   end
 
 end

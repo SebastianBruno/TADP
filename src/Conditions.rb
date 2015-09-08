@@ -17,14 +17,49 @@ class Conditions
     return metodos_matcheados
   end
 
-  def has_parameters(amount, status = 'everything')
-    if status == 'mandatory'
-      return @metodos.select do |metodo| method(metodo).parameters.select do |param| param.first == :req end.size == amount end
-    elsif status == 'optional'
-      return @metodos.select do |metodo| method(metodo).parameters.select do |param| param.first == :opt end.size == amount end
-    elsif status == 'everything'
-      return @metodos.select do |metodo| method(metodo).parameters.size == amount end
+  def optional
+    return [:opt]
+  end
+
+  def mandatory
+    return [:req]
+  end
+
+  def any
+    return [:opt, :req, :bloc, :rest]
+  end
+
+  def find_methods_with_criteria(amount, criteria, &block)
+    result = []
+    @objetos.each { |objeto|
+      metodos = objeto.instance_methods(false)
+
+      result.concat(metodos.select { |metodo|
+        objeto.new.method(metodo).parameters.select { |parameter|
+          block.call(criteria, parameter)
+        }.count == amount
+      })
+    }
+
+    return result
+  end
+
+
+  def has_parameters(amount, criteria = nil)
+    if(criteria.nil?)
+      criteria = any()
     end
+
+    if(criteria.class == Regexp)
+      return find_methods_with_criteria amount, criteria do |criteria, parameter|
+        !(criteria =~ parameter[1]).nil?
+      end
+    end
+
+    return find_methods_with_criteria amount, criteria do |criteria, parameter|
+        criteria.include? parameter.first
+    end
+
   end
 
   def where(*args)
