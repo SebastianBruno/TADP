@@ -1,5 +1,6 @@
 require 'rspec'
 require_relative '../src/Aspects'
+require_relative '../src/TestClass'
 
 describe Aspects do
 
@@ -43,10 +44,12 @@ describe Aspects do
       expect(Aspects.objetos.first).to eq(Aspects)
   end
 
-  it 'Cuando le paso varias listas de metodos al where, me devuelve la intereseccion de todas' do
-    methods = Aspects.methods(false)
+  it 'Cuando le paso nil a una condition, tira ArgumentError' do
+      metodos = Aspects.on /TestClass/ do
+        where name(/_metodo/)
+      end
 
-    expect(Aspects.where([methods[0]], [methods[0], methods[1]])).to eq([methods[0]])
+      expect(metodos.count).to eq(2)
   end
 
 end
