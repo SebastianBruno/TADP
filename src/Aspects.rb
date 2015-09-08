@@ -1,3 +1,5 @@
+require_relative '../src/Conditions'
+
 class Aspects
 
   #Todos los objetos a donde aplicara este aspect
@@ -16,8 +18,10 @@ class Aspects
     #Valida los parametros pasados
     raise ArgumentError if objetos.count.eql? 0 or bloque.nil?
 
-    #Ejecuta el proc en este contexto
-    instance_eval &bloque
+    conditions = Conditions.new(@@objetos)
+
+    #Ejecuta el proc en el contexto de Conditions
+    conditions.instance_eval &bloque
   end
 
   def self.guardar_objetos(*args)
@@ -36,16 +40,6 @@ class Aspects
         end
       end
     end
-  end
-
-  def self.where(*args)
-    metodos_totales = [ args[0][0] ]
-
-    args.each { |metodos_condicion|
-        metodos_totales = metodos_totales & metodos_condicion
-    }
-
-    return metodos_totales
   end
 
 end
