@@ -24,4 +24,5 @@ describe Conditions do
     conditions = Conditions.new([TestClass])
     expect(conditions.where [methods[0]], [methods[0], methods[1]]).to eq([methods[0]])
   end
+
 end

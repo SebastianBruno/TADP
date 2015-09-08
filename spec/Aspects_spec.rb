@@ -44,12 +44,21 @@ describe Aspects do
       expect(Aspects.objetos.first).to eq(Aspects)
   end
 
-  it 'Cuando le paso nil a una condition, tira ArgumentError' do
+  it 'Cuando le paso una regex que matchea con dos metodos, que me los devuelva' do
       metodos = Aspects.on /TestClass/ do
         where name(/_metodo/)
       end
-
       expect(metodos.count).to eq(2)
+  end
+
+  it 'sadasda' do
+    metodos = Aspects.on Aspects do
+      where has_parameters(0, 'optional')
+    end
+    metodos.each do |met|
+      puts(met)
+    end
+    expect(metodos.count).to eq(0)
   end
 
 end
