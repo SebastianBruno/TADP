@@ -80,7 +80,7 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(1)
-    expect(metodos[0]).to eq(:metodo_con_dos_parametros)
+    expect(metodos[0].name).to eq(:metodo_con_dos_parametros)
   end
 
   it 'Obtener un metodo con tres parametros obligatorios de TestClass' do
@@ -89,7 +89,25 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(1)
-    expect(metodos[0]).to eq(:metodo_con_tres_parametros)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros)
+  end
+
+  it 'Obtener un metodo con tres parametros obligatorios de instancia de TestClass' do
+    metodos = Aspects.on TestClass.new do
+      where has_parameters(3, mandatory)
+    end
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros)
+  end
+
+  it 'Obtener un metodo con tres parametros obligatorios de instancia de TestModule' do
+    metodos = Aspects.on TestModule do
+      where has_parameters(3, mandatory)
+    end
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros)
   end
 
   it 'Obtener dos metodos que no reciben parametros de TestClass' do
@@ -98,8 +116,28 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(2)
-    expect(metodos[0]).to eq(:un_metodo)
-    expect(metodos[1]).to eq(:otro_metodo)
+    expect(metodos[0].name).to eq(:un_metodo)
+    expect(metodos[1].name).to eq(:otro_metodo)
+  end
+
+  it 'Obtener dos metodos que no reciben parametros de instancia de TestClass' do
+    metodos = Aspects.on TestClass.new do
+      where has_parameters(0)
+    end
+
+    expect(metodos.count).to eq(2)
+    expect(metodos[0].name).to eq(:un_metodo)
+    expect(metodos[1].name).to eq(:otro_metodo)
+  end
+
+  it 'Obtener dos metodos que no reciben parametros de TestModule' do
+    metodos = Aspects.on TestModule do
+      where has_parameters(0)
+    end
+
+    expect(metodos.count).to eq(2)
+    expect(metodos[0].name).to eq(:un_metodo)
+    expect(metodos[1].name).to eq(:otro_metodo)
   end
 
   it 'Obtener un metodo con tres parametros opcionales de TestClass' do
@@ -108,7 +146,7 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(1)
-    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros_opcionales)
   end
 
   it 'Obtener un metodo con tres parametros opcionales de la instancia de TestClass' do
@@ -117,7 +155,7 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(1)
-    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros_opcionales)
   end
 
   it 'Obtener un metodo con tres parametros opcionales de TestModule' do
@@ -126,6 +164,6 @@ describe Aspects do
     end
 
     expect(metodos.count).to eq(1)
-    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
+    expect(metodos[0].name).to eq(:metodo_con_tres_parametros_opcionales)
   end
 end

@@ -2,24 +2,26 @@ class Conditions
 
   def initialize(objetos)
     @objetos = objetos
-    @metodos = []
+    @metodos = [] #Array de UnboundMethods
 
     #Guarda todos los metodos en el array
     @objetos.each do |objeto|
       if objeto.class == Class or objeto.class == Module
-        @metodos.concat(objeto.instance_methods(false))
+        clase = objeto
       else
-        @metodos.concat(objeto.class.instance_methods(false))
+        clase = objeto.class
+      end
+      clase.instance_methods(false).each do |metodo|
+        @metodos << clase.instance_method(metodo)
       end
     end
-
   end
 
   def name(regex)
     raise ArgumentError if regex.nil? or regex.eql? ''
     metodos_matcheados = []
     @metodos.each { |metodo|
-        metodos_matcheados << metodo if metodo =~ regex
+        metodos_matcheados << metodo.name if metodo.name =~ regex
       }
     return metodos_matcheados
   end
@@ -38,30 +40,12 @@ class Conditions
 
   def find_methods_with_criteria(amount, criteria, &block)
     result = []
-    @objetos.each { |objeto|
-      if objeto.class == Class
-        metodos = objeto.instance_methods(false)
-        instancia = objeto.new
-      elsif objeto.class == Module
-        metodos = objeto.instance_methods(false)
-        instancia = objeto
-      else
-        metodos = objeto.class.instance_methods(false)
-        instancia = objeto
-      end
 
-      result.concat(metodos.select { |metodo|
-          if objeto.class == Module
-            instancia.instance_method(metodo).parameters.select { |parameter|
-              block.call(criteria, parameter)
-            }.count == amount
-          else
-            instancia.method(metodo).parameters.select { |parameter|
-              block.call(criteria, parameter)
-            }.count == amount
-          end
-      })
-    }
+    result.concat(@metodos.select { |metodo|
+      metodo.parameters.select { |parameter|
+          block.call(criteria, parameter)
+        }.count == amount
+    })
 
     return result
   end
