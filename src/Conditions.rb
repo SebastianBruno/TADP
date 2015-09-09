@@ -34,10 +34,16 @@ class Conditions
   def find_methods_with_criteria(amount, criteria, &block)
     result = []
     @objetos.each { |objeto|
-      metodos = objeto.instance_methods(false)
+      if objeto.class == Class
+        metodos = objeto.instance_methods(false)
+        instancia = objeto.new
+      else
+        metodos = objeto.class.instance_methods(false)
+        instancia = objeto
+      end
 
       result.concat(metodos.select { |metodo|
-        objeto.new.method(metodo).parameters.select { |parameter|
+          instancia.method(metodo).parameters.select { |parameter|
           block.call(criteria, parameter)
         }.count == amount
       })
