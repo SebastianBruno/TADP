@@ -4,20 +4,35 @@ class Aspects
 
   #Todos los objetos a donde aplicara este aspect
   @@objetos
+  @@metodos
 
   def self.objetos
     @@objetos
   end
 
+  def self.metodos
+    @@metodos
+  end
+
   def self.on (*args,&bloque)
     @@objetos = []
+    @@metodos = []
+
     #Guarda todos los objetos pasados por parametros
     guardar_objetos(*args)
+
+    @@objetos.each do |obj|
+      if(obj.class == Class)
+        @@metodos.concat(obj.instance_methods(false))
+      else
+        @@metodos.concat(obj.class.instance_methods(false))
+      end
+    end
 
     #Valida los parametros pasados
     raise ArgumentError if objetos.count.eql? 0 or bloque.nil?
 
-    conditions = Conditions.new(@@objetos)
+    conditions = Conditions.new(@@objetos, @@metodos)
 
     #Ejecuta el proc en el contexto de Conditions
     conditions.instance_eval &bloque
