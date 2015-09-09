@@ -1,13 +1,18 @@
 class Conditions
 
-  def initialize(objetos,metodos = [])
+  def initialize(objetos)
     @objetos = objetos
-    @metodos = metodos
+    @metodos = []
 
-    #TODO: Esto si ya se hace al inicializar la Condition, haria falta aca? Lo dejo comentado, putearme al grupo si hace falta. Sebastian
-    #@objetos.each do |objeto|
-      #@metodos.concat(objeto.instance_methods(false))
-    # end
+    #Guarda todos los metodos en el array
+    @objetos.each do |objeto|
+      if objeto.class == Class
+        @metodos.concat(objeto.instance_methods(false))
+      else
+        @metodos.concat(objeto.class.instance_methods(false))
+      end
+    end
+
   end
 
   def name(regex)

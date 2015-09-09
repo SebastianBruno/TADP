@@ -21,18 +21,10 @@ class Aspects
     #Guarda todos los objetos pasados por parametros
     guardar_objetos(*args)
 
-    @@objetos.each do |obj|
-      if(obj.class == Class)
-        @@metodos.concat(obj.instance_methods(false))
-      else
-        @@metodos.concat(obj.class.instance_methods(false))
-      end
-    end
-
     #Valida los parametros pasados
     raise ArgumentError if objetos.count.eql? 0 or bloque.nil?
 
-    conditions = Conditions.new(objetos, metodos)
+    conditions = Conditions.new(objetos)
 
     #Ejecuta el proc en el contexto de Conditions
     conditions.instance_eval &bloque
