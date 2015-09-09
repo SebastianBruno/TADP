@@ -1,6 +1,7 @@
 require 'rspec'
 require_relative '../src/Aspects'
 require_relative '../src/TestClass'
+require_relative '../src/TestModule'
 
 describe Aspects do
 
@@ -44,11 +45,25 @@ describe Aspects do
       expect(Aspects.objetos.first).to eq(Aspects)
   end
 
-  it 'Cuando le paso una regex que matchea con dos metodos, que me los devuelva' do
+  it 'Cuando le paso una regex que matchea con dos metodos de una clase, que me los devuelva' do
       metodos = Aspects.on /TestClass/ do
         where name(/_metodo/)
       end
       expect(metodos.count).to eq(2)
+  end
+
+  it 'Cuando le paso una regex que matchea con dos metodos de una instancia, que me los devuelva' do
+    metodos = Aspects.on TestClass.new do
+      where name(/_metodo/)
+    end
+    expect(metodos.count).to eq(2)
+  end
+
+  it 'Cuando le paso una regex que matchea con dos metodos de un modulo, que me los devuelva' do
+    metodos = Aspects.on TestModule do
+      where name(/_metodo/)
+    end
+    expect(metodos.count).to eq(2)
   end
 
   it 'Cuando le paso nil a name, devuelve ArgumentError' do
@@ -105,4 +120,12 @@ describe Aspects do
     expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
   end
 
+  it 'Obtener un metodo con tres parametros opcionales de TestModule' do
+    metodos = Aspects.on TestModule do
+      where has_parameters(3, optional)
+    end
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
+  end
 end

@@ -6,7 +6,7 @@ class Conditions
 
     #Guarda todos los metodos en el array
     @objetos.each do |objeto|
-      if objeto.class == Class
+      if objeto.class == Class or objeto.class == Module
         @metodos.concat(objeto.instance_methods(false))
       else
         @metodos.concat(objeto.class.instance_methods(false))
@@ -42,15 +42,24 @@ class Conditions
       if objeto.class == Class
         metodos = objeto.instance_methods(false)
         instancia = objeto.new
+      elsif objeto.class == Module
+        metodos = objeto.instance_methods(false)
+        instancia = objeto
       else
         metodos = objeto.class.instance_methods(false)
         instancia = objeto
       end
 
       result.concat(metodos.select { |metodo|
-          instancia.method(metodo).parameters.select { |parameter|
-          block.call(criteria, parameter)
-        }.count == amount
+          if objeto.class == Module
+            instancia.instance_method(metodo).parameters.select { |parameter|
+              block.call(criteria, parameter)
+            }.count == amount
+          else
+            instancia.method(metodo).parameters.select { |parameter|
+              block.call(criteria, parameter)
+            }.count == amount
+          end
       })
     }
 
