@@ -32,7 +32,7 @@ class Aspects
     #Valida los parametros pasados
     raise ArgumentError if objetos.count.eql? 0 or bloque.nil?
 
-    conditions = Conditions.new(@@objetos, @@metodos)
+    conditions = Conditions.new(objetos, metodos)
 
     #Ejecuta el proc en el contexto de Conditions
     conditions.instance_eval &bloque

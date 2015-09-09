@@ -1,8 +1,8 @@
 class Conditions
 
-  def initialize(objetos)
+  def initialize(objetos,metodos = [])
     @objetos = objetos
-    @metodos = []
+    @metodos = metodos
     @objetos.each do |objeto|
       @metodos.concat(objeto.instance_methods(false))
       end
