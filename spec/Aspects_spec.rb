@@ -166,4 +166,13 @@ describe Aspects do
     expect(metodos.count).to eq(1)
     expect(metodos[0].name).to eq(:metodo_con_tres_parametros_opcionales)
   end
+
+  it 'Obtener todos los metodos menos el que cumpla' do
+    metodos = Aspects.on TestModule do
+      where neg(has_parameters(3, optional))
+    end
+
+    expect(metodos.count).to eq(4)
+  end
+
 end

@@ -77,5 +77,8 @@ class Conditions
     return metodos_totales
   end
 
+  def neg(arg)
+    @metodos - arg
+  end
 
 end
