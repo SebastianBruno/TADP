@@ -3,9 +3,11 @@ class Conditions
   def initialize(objetos,metodos = [])
     @objetos = objetos
     @metodos = metodos
-    @objetos.each do |objeto|
-      @metodos.concat(objeto.instance_methods(false))
-      end
+
+    #TODO: Esto si ya se hace al inicializar la Condition, haria falta aca? Lo dejo comentado, putearme al grupo si hace falta. Sebastian
+    #@objetos.each do |objeto|
+      #@metodos.concat(objeto.instance_methods(false))
+    # end
   end
 
   def name(regex)

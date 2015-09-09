@@ -96,4 +96,13 @@ describe Aspects do
     expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
   end
 
+  it 'Obtener un metodo con tres parametros opcionales de la instancia de TestClass' do
+    metodos = Aspects.on TestClass.new do
+      where has_parameters(3, optional)
+    end
+
+    expect(metodos.count).to eq(1)
+    expect(metodos[0]).to eq(:metodo_con_tres_parametros_opcionales)
+  end
+
 end
