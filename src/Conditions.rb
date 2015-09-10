@@ -2,25 +2,31 @@ class Conditions
 
   def initialize(objetos)
     @objetos = objetos
-    @metodos = [] #Array de UnboundMethods
+    @metodos_parciales = [] #Array de UnboundMethods
+    @objects_with_methods = {} #hash de metodos
 
-    #Guarda todos los metodos en el array
+    #[ Clase : [ :metodo1, :metodo2] , objeto : [ :metodo1] ]
+
     @objetos.each do |objeto|
-      if objeto.class == Class or objeto.class == Module
-        clase = objeto
-      else
-        clase = objeto.class
-      end
-      clase.instance_methods(false).each do |metodo|
-        @metodos << clase.instance_method(metodo)
-      end
+      puts(objeto)
+       if objeto.class == Class or objeto.class == Module
+         objeto.instance_methods(false).each do |met|
+           @metodos_parciales << objeto.instance_method(met)
+         end
+       else
+         objeto.singleton_class.instance_methods(false) + objeto.class.instance_methods(false).each do |met|
+           @metodos_parciales << objeto.singleton_class.instance_method(met)
+         end
+       end
+       @objects_with_methods.merge({objeto => @metodos_parciales})
+       @metodos_parciales = []
     end
   end
 
   def name(regex)
     raise ArgumentError if regex.nil? or regex.eql? ''
     metodos_matcheados = []
-    @metodos.each { |metodo|
+    @objects_with_methods.values.flatten.each { |metodo|
         metodos_matcheados << metodo.name if metodo.name =~ regex
       }
     return metodos_matcheados
@@ -41,7 +47,7 @@ class Conditions
   def find_methods_with_criteria(amount, criteria, &block)
     result = []
 
-    result.concat(@metodos.select { |metodo|
+    result.concat(@objects_with_methods.values.flatten.select { |metodo|
       metodo.parameters.select { |parameter|
           block.call(criteria, parameter)
         }.count == amount
@@ -68,6 +74,8 @@ class Conditions
 
   end
 
+  #args = [[metodos_condicion1],[metodos_condicion2],[metodos_condicion3]]
+
   def where(*args)
     raise ArgumentError if args.nil? or args.count.eql? 0
     metodos_totales = args[0]
@@ -78,7 +86,15 @@ class Conditions
   end
 
   def neg(arg)
-    @metodos - arg
+    @objects_with_methods.values.flatten - arg
+  end
+
+  def transform(arg)
+
+  end
+
+  def inject(hash={})
+    hash.each_pair
   end
 
 end
