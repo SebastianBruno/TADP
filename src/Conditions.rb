@@ -2,24 +2,23 @@ class Conditions
 
   def initialize(objetos)
     @objetos = objetos
-    @metodos_parciales = [] #Array de UnboundMethods
+    metodos_parciales = [] #Array de UnboundMethods
     @objects_with_methods = {} #hash de metodos
 
     #[ Clase : [ :metodo1, :metodo2] , objeto : [ :metodo1] ]
 
     @objetos.each do |objeto|
-      puts(objeto)
        if objeto.class == Class or objeto.class == Module
          objeto.instance_methods(false).each do |met|
-           @metodos_parciales << objeto.instance_method(met)
+           metodos_parciales << objeto.instance_method(met)
          end
        else
          objeto.singleton_class.instance_methods(false) + objeto.class.instance_methods(false).each do |met|
-           @metodos_parciales << objeto.singleton_class.instance_method(met)
+           metodos_parciales << objeto.singleton_class.instance_method(met)
          end
        end
-       @objects_with_methods.merge({objeto => @metodos_parciales})
-       @metodos_parciales = []
+      @objects_with_methods = @objects_with_methods.merge({objeto=>metodos_parciales})
+      metodos_parciales = []
     end
   end
 
@@ -58,11 +57,11 @@ class Conditions
 
 
   def has_parameters(amount, criteria = nil)
-    if(criteria.nil?)
-      criteria = any()
+    if criteria.nil?
+      criteria = any
     end
 
-    if(criteria.class == Regexp)
+    if criteria.class == Regexp
       return find_methods_with_criteria amount, criteria do |criteria, parameter|
         !(criteria =~ parameter[1]).nil?
       end
