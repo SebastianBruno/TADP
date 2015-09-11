@@ -1,3 +1,5 @@
+require_relative '../src/Transformations'
+
 class Conditions
 
   def initialize(objetos)
@@ -32,15 +34,15 @@ class Conditions
   end
 
   def optional
-    return [:opt]
+    [:opt]
   end
 
   def mandatory
-    return [:req]
+    [:req]
   end
 
   def any
-    return [:opt, :req, :bloc, :rest]
+    [:opt, :req, :bloc, :rest]
   end
 
   def find_methods_with_criteria(amount, criteria, &block)
@@ -52,7 +54,7 @@ class Conditions
         }.count == amount
     })
 
-    return result
+    result
   end
 
 
@@ -62,12 +64,12 @@ class Conditions
     end
 
     if criteria.class == Regexp
-      return find_methods_with_criteria amount, criteria do |criteria, parameter|
+      find_methods_with_criteria amount, criteria do |criteria, parameter|
         !(criteria =~ parameter[1]).nil?
       end
     end
 
-    return find_methods_with_criteria amount, criteria do |criteria, parameter|
+    find_methods_with_criteria amount, criteria do |criteria, parameter|
         criteria.include? parameter.first
     end
 
@@ -81,19 +83,16 @@ class Conditions
     args.each { |metodos_condicion|
       metodos_totales = metodos_totales & metodos_condicion
     }
-    return metodos_totales
+    metodos_totales
   end
 
   def neg(arg)
     @objects_with_methods.values.flatten - arg
   end
 
-  def transform(arg)
-
-  end
-
-  def inject(hash={})
-    hash.each_pair
+  def transform(args, &block)
+    transformations = Transformations.new(@objects_with_methods)
+    transformations.instance_eval &block
   end
 
 end

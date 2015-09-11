@@ -175,4 +175,37 @@ describe Aspects do
     expect(metodos.count).to eq(4)
   end
 
+  it 'Obtener metodos sabiendo interpretar si se habla de objeto/clase/modulo y aunque sea mas de un parametro' do
+    testClass = TestClass.new
+    metodos = Aspects.on TestModule, testClass do
+      where (has_parameters(3, optional))
+    end
+
+    expect(metodos.count).to eq(2)
+    expect(metodos[0].bind(TestModule).to_s).to eq("#<Method: Module(TestModule)#metodo_con_tres_parametros_opcionales>")
+    expect(metodos[1].bind(testClass).to_s).to eq("#<Method: TestClass(TestClass)#metodo_con_tres_parametros_opcionales>")
+  end
+
+  it 'sadsadas' do
+  class A
+      def saludar(x)
+        "Hola, " + x
+      end
+    end
+
+    class B
+      def saludar(x)
+        "Adiosin, " + x
+      end
+    end
+
+    Aspects.on A do
+      transform(where name(/saludar/)) do
+        redirect_to(B.new)
+      end
+    end
+
+    expect(A.new.saludar("Mundo")).to eq("Adiosin, Mundo")
+  end
+
 end
