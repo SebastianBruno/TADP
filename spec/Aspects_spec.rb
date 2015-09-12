@@ -204,5 +204,7 @@ describe Aspects do
     expect(pr.metodo_con_tres_parametros_opcionales 'asd','dsds','aaa').to eql('hola')
     expect(testClass.metodo_con_tres_parametros_opcionales 'asd','dsds','aaa').to eql('hola')
 
+    expect(TestClass.new.metodo_con_tres_parametros_opcionales).to eql('hola')
+    expect(TestClass.new.metodo_con_tres_parametros_opcionales 'asd','dsds','aaa').to eql('hola')
   end
 end
