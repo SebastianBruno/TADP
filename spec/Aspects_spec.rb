@@ -186,26 +186,4 @@ describe Aspects do
     expect(metodos[1].bind(testClass).to_s).to eq("#<Method: TestClass(TestClass)#metodo_con_tres_parametros_opcionales>")
   end
 
-  it 'sadsadas' do
-  class A
-      def saludar(x)
-        "Hola, " + x
-      end
-    end
-
-    class B
-      def saludar(x)
-        "Adiosin, " + x
-      end
-    end
-
-    Aspects.on A do
-      transform(where name(/saludar/)) do
-        redirect_to(B.new)
-      end
-    end
-
-    expect(A.new.saludar("Mundo")).to eq("Adiosin, Mundo")
-  end
-
 end
