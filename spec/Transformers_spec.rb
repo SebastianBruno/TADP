@@ -14,6 +14,27 @@ describe Transformations do
     prueba.metodo("s","2222222")
   end
 
+  it 'Test del redirect_to' do
+    class A
+      def saludar(x)
+        "Hola " + x
+      end
+    end
+
+    class B
+      def saludar(x)
+        "Adiosin " + x
+      end
+    end
+
+    Aspects.on A do
+      transform(where name(/saludar/)) do
+        redirect_to(B.new)
+      end
+    end
+
+    expect(A.new.saludar("Mundo")).to eq("Adiosin Mundo")
+  end
 
 end
 
