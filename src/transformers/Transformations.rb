@@ -47,4 +47,38 @@ class Transformations
     end
   end
 
+  def after(&bloque)
+    @objects_with_methods.each_pair do |key, methods|
+      methods.each do |metodo|
+        params = metodo.parameters.map(&:last)
+        if key.class == Module or key.class == Class
+          instance = key
+        else
+          instance = key.singleton_class
+        end
+
+        instance.send(:alias_method, :"#{metodo.name}_after", metodo.name)
+        instance.send(:define_method, metodo.name) do |*args|
+          self.send(:"#{metodo.name}_after", *args)
+          self.instance_eval &bloque
+        end
+      end
+    end
+  end
+
+  def instead_of(&bloque)
+    @objects_with_methods.each_pair do |key, methods|
+      methods.each do |metodo|
+        params = metodo.parameters.map(&:last)
+        if key.class == Module or key.class == Class
+          instance = key
+        else
+          instance = key.singleton_class
+        end
+        instance.send(:define_method, metodo.name) do |*args|
+          self.instance_eval &bloque
+        end
+      end
+    end
+  end
 end

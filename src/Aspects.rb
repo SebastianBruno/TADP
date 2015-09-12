@@ -6,13 +6,8 @@ class Aspects
     @objetos
   end
 
-  def self.metodos
-    @metodos
-  end
-
   def self.on (*args,&bloque)
     @objetos = []
-    @metodos = []
 
     #Guarda todos los objetos pasados por parametros
     guardar_objetos(*args)

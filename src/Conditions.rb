@@ -95,4 +95,6 @@ class Conditions
     transformations.instance_eval &block
   end
 
+
+
 end
