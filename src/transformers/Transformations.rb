@@ -21,6 +21,9 @@ class Transformations
         instance.send(:define_method, metodo.name) do |*args|
 
           hash.each do |key, value|
+            if value.class == Proc
+              value = value.call self,metodo.name,args[params.index(key)]
+            end
             args[params.index(key)] = value
           end
 
