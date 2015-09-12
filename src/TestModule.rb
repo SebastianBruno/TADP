@@ -10,6 +10,8 @@ module TestModule
 
   def metodo_con_tres_parametros(paramUno, paramDos, paramTres) end
 
-  def metodo_con_tres_parametros_opcionales(paramUno=nil, paramDos=nil, paramTres=nil) end
+  def metodo_con_tres_parametros_opcionales(paramUno=nil, paramDos=nil, paramTres=nil)
+    paramUno
+  end
 
 end

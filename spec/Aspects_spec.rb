@@ -186,4 +186,23 @@ describe Aspects do
     expect(metodos[1].bind(testClass).to_s).to eq("#<Method: TestClass(TestClass)#metodo_con_tres_parametros_opcionales>")
   end
 
+  it 'Tranformer' do
+    testClass = TestClass.new
+    Aspects.on TestModule, testClass, TestClass do
+      transform(where (has_parameters(3, optional))) do
+        inject({:paramUno=>'hola'})
+      end
+    end
+
+    class Prueba2
+      include TestModule
+    end
+
+    pr = Prueba2.new
+    expect(pr.metodo_con_tres_parametros_opcionales).to eql('hola')
+    expect(testClass.metodo_con_tres_parametros_opcionales).to eql('hola')
+    expect(pr.metodo_con_tres_parametros_opcionales 'asd','dsds','aaa').to eql('hola')
+    expect(testClass.metodo_con_tres_parametros_opcionales 'asd','dsds','aaa').to eql('hola')
+
+  end
 end

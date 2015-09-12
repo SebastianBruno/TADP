@@ -10,14 +10,21 @@ class Transformations
       methods.each do |metodo|
 
         params = metodo.parameters.map(&:last)
-        key.singleton_class.send(:alias_method, :metodoNuevo, metodo.name)
-        key.singleton_class.send(:define_method, metodo.name) do |*args|
+
+        if key.class == Module or key.class == Class
+          instance = key
+        else
+          instance = key.singleton_class
+        end
+
+        instance.send(:alias_method, :metodoNuevo, metodo.name)
+        instance.send(:define_method, metodo.name) do |*args|
 
           hash.each do |key, value|
             args[params.index(key)] = value
           end
 
-          key.send(:metodoNuevo,*args)
+          self.send(:metodoNuevo,*args)
 
         end
 
