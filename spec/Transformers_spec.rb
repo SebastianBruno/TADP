@@ -1,4 +1,5 @@
 require 'rspec'
+require_relative '../src/Aspects'
 require_relative '../src/transformers/Transformations'
 
 describe Transformations do
@@ -9,9 +10,9 @@ describe Transformations do
 
     transformer = Transformations.new({prueba => [prueba.singleton_class.instance_method(:metodo)]})
 
-    transformer.inject({:p2 => "pepe", :p1 => "La_Rola"})
+    transformer.inject({:p2 => "cambiame2", :p1 => "cambiame1"})
 
-    prueba.metodo("s","2222222")
+    expect(prueba.metodo("s","2222222")).to eq("cambiame1 - cambiame2")
   end
 
   it 'Test del redirect_to' do
@@ -41,7 +42,7 @@ end
 class Prueba
 
   def metodo(p1,p2)
-    puts(p1 + " - " + p2)
+    return (p1 + " - " + p2)
   end
 
 end

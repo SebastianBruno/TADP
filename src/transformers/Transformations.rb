@@ -28,9 +28,17 @@ class Transformations
   end
 
   def redirect_to(instance)
+    mtds = []
     @objects_with_methods.each_pair do |objeto, metodos|
       metodos.each do |metodo|
-        if instance.methods.include?metodo.name #Validacion para que exista ese metodo para el nuevo objeto
+
+      if objeto.class == Class or objeto.class == Module
+        mtds = objeto.instance_methods(false)
+      else
+        mtds = objeto.singleton_class.instance_methods(false)
+      end
+
+        if mtds.include?metodo.name #Validacion para que exista ese metodo para el nuevo objeto
           objeto.send(:define_method, metodo.name) do |*args|
             instance.method(metodo.name).call(*args)
           end
