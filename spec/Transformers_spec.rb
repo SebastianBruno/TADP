@@ -2,6 +2,7 @@ require 'rspec'
 require_relative '../src/Aspects'
 require_relative '../src/MiClase'
 require_relative '../src/transformers/Transformations'
+require_relative '../src/Aspects'
 
 describe Transformations do
 
@@ -31,7 +32,7 @@ describe Transformations do
 
     Aspects.on A do
       transform(where name(/saludar/)) do
-        redirect_to(B.new)
+        inject({:x=>'lalalala'})
       end
     end
 

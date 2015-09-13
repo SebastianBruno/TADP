@@ -10,7 +10,7 @@ class Conditions
     #[ Clase : [ :metodo1, :metodo2] , objeto : [ :metodo1] ]
 
     @objetos.each do |objeto|
-       if objeto.class == Class or objeto.class == Module
+       if objeto.is_a? Class or objeto.is_a? Module
          objeto.instance_methods(false).each do |met|
            metodos_parciales << objeto.instance_method(met)
          end
@@ -63,7 +63,7 @@ class Conditions
       criteria = any
     end
 
-    if criteria.class == Regexp
+    if criteria.is_a? Regexp
       find_methods_with_criteria amount, criteria do |criteria, parameter|
         !(criteria =~ parameter[1]).nil?
       end

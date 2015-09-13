@@ -22,20 +22,20 @@ class Aspects
   end
 
   def self.guardar_objetos(*args)
-    args.each do |objeto|
+    args.each { |objeto|
       if objeto.class != Regexp
         #Si no es una expresion regular lo agrega directo
         @objetos << objeto
       else
         #Si es una expresion regular, busca en las constantes de Object, las Clases o Modulos que matcheen
-        Object.constants.each do |symbol|
-          if !(symbol.to_s =~ objeto).nil? then
-            #Si matchea la agrega solo si es una clase o un modulo
-            @matcheado = Object.const_get(symbol)
-            @objetos << @matcheado if @matcheado.class.to_s.eql?('Class') or @matcheado.class.to_s.eql?('Module')
-          end
-        end
+        matcheadas = Object.constants.select { |symbol| !(symbol.to_s =~ objeto).nil?}
+
+        #Si matchea la agrega solo si es una clase o un modulo
+        matcheadas.each { |symbol|
+          @matcheado = Object.const_get(symbol)
+          @objetos << @matcheado if @matcheado.is_a? Class or @matcheado.is_a? Module
+        }
       end
-    end
+    }
   end
 end
