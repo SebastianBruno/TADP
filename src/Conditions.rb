@@ -1,4 +1,4 @@
-require_relative '../src/transformers/Transformations'
+require_relative '../src/Transformations'
 
 class Conditions
 
