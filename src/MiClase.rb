@@ -1,5 +1,5 @@
 class MiClase
-  attr_accessor :x
+  attr_accessor :x, :z, :w
   def m1(x, y)
     x + y
   end
