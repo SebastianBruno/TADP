@@ -10,17 +10,15 @@ class Conditions
     #[ Clase : [ :metodo1, :metodo2] , objeto : [ :metodo1] ]
 
     @objetos.each do |objeto|
-       if objeto.is_a? Class or objeto.is_a? Module
-         objeto.instance_methods(false).each do |met|
-           metodos_parciales << objeto.instance_method(met)
-         end
-       else
-         objeto.singleton_class.instance_methods(false) + objeto.class.instance_methods(false).each do |met|
-           metodos_parciales << objeto.singleton_class.instance_method(met)
-         end
-       end
-      @objects_with_methods = @objects_with_methods.merge({objeto=>metodos_parciales})
-      metodos_parciales = []
+      @objects_with_methods = @objects_with_methods.merge({objeto =>
+          if objeto.is_a? Class or objeto.is_a? Module
+            objeto.instance_methods(false).map { |met| objeto.instance_method(met) }
+          else
+            objeto.singleton_class.instance_methods(false) + objeto.class.instance_methods(false).map { |met|
+              objeto.singleton_class.instance_method(met)
+            }
+          end
+       })
     end
   end
 
@@ -28,8 +26,10 @@ class Conditions
     raise ArgumentError if regex.nil? or regex.eql? ''
 
     return @objects_with_methods.values.flatten.select { |metodo|
-        metodo.name =~ regex
-    }.map do |metodo| metodo.name end
+      metodo.name =~ regex
+    }.map do |metodo|
+      metodo.name
+    end
 
   end
 
@@ -49,10 +49,10 @@ class Conditions
     result = []
 
     result.concat(@objects_with_methods.values.flatten.select { |metodo|
-      metodo.parameters.select { |parameter|
-          block.call(criteria, parameter)
-        }.count == amount
-    })
+                    metodo.parameters.select { |parameter|
+                      block.call(criteria, parameter)
+                    }.count == amount
+                  })
 
     result
   end
@@ -70,7 +70,7 @@ class Conditions
     end
 
     find_methods_with_criteria amount, criteria do |criteria, parameter|
-        criteria.include? parameter.first
+      criteria.include? parameter.first
     end
 
   end
@@ -94,7 +94,6 @@ class Conditions
     transformations = Transformations.new(@objects_with_methods)
     transformations.instance_eval &block
   end
-
 
 
 end
