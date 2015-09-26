@@ -26,11 +26,11 @@ class Conditions
 
   def name(regex)
     raise ArgumentError if regex.nil? or regex.eql? ''
-    metodos_matcheados = []
-    @objects_with_methods.values.flatten.each { |metodo|
-        metodos_matcheados << metodo.name if metodo.name =~ regex
-      }
-    return metodos_matcheados
+
+    return @objects_with_methods.values.flatten.select { |metodo|
+        metodo.name =~ regex
+    }.map do |metodo| metodo.name end
+
   end
 
   def optional

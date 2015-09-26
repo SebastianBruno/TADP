@@ -32,7 +32,7 @@ describe Transformations do
 
     Aspects.on A do
       transform(where name(/saludar/)) do
-        inject({:x=>'lalalala'})
+        redirect_to(B.new)
       end
     end
 
