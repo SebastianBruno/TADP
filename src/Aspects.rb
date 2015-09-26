@@ -6,7 +6,7 @@ class Aspects
     @objetos
   end
 
-  def self.on (*args,&bloque)
+  def self.on (*args, &bloque)
     @objetos = []
 
     #Guarda todos los objetos pasados por parametros
