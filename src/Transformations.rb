@@ -53,6 +53,23 @@ class Transformations
     end
   end
 
+  def before(&bloque)
+    @objects_with_methods.each_pair do |key, methods|
+      methods.each do |metodo|
+        params = metodo.parameters.map(&:last)
+        instance = obtenerClaseDeUnObjeto key
+        instance.send(:alias_method, :"#{metodo.name}_before", metodo.name)
+        instance.send(:define_method, metodo.name) do |*args|
+          cont = Proc.new { |inst,cont,*arguments|
+            inst.send(:"#{metodo.name}_before", *arguments)
+          }
+          self.instance_exec self,cont,*args, &bloque
+        end
+      end
+    end
+  end
+
+
   def instead_of(&bloque)
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
