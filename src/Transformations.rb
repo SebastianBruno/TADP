@@ -1,5 +1,7 @@
-class Transformations
+require_relative '../src/Functions'
 
+class Transformations
+  include Funciones
   def initialize(args)
     @objects_with_methods = args
   end
@@ -8,11 +10,7 @@ class Transformations
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
         params = metodo.parameters.map(&:last)
-        if key.class == Module or key.class == Class
-          instance = key
-        else
-          instance = key.singleton_class
-        end
+        instance = obtenerClaseDeUnObjeto key
         instance.send(:alias_method, :metodoNuevo, metodo.name)
         instance.send(:define_method, metodo.name) do |*args|
           hash.each do |key, value|
@@ -31,13 +29,7 @@ class Transformations
     mtds = []
     @objects_with_methods.each_pair do |objeto, metodos|
       metodos.each do |metodo|
-
-      if objeto.class == Class or objeto.class == Module
-        mtds = objeto.instance_methods(false)
-      else
-        mtds = objeto.singleton_class.instance_methods(false)
-      end
-
+        mtds = obtenerMetodosdeUnObjeto objeto
         if mtds.include?metodo.name #Validacion para que exista ese metodo para el nuevo objeto
           objeto.send(:define_method, metodo.name) do |*args|
             instance.method(metodo.name).call(*args)
@@ -51,12 +43,7 @@ class Transformations
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
         params = metodo.parameters.map(&:last)
-        if key.class == Module or key.class == Class
-          instance = key
-        else
-          instance = key.singleton_class
-        end
-
+        instance = obtenerClaseDeUnObjeto key
         instance.send(:alias_method, :"#{metodo.name}_after", metodo.name)
         instance.send(:define_method, metodo.name) do |*args|
           self.send(:"#{metodo.name}_after", *args)
@@ -69,12 +56,7 @@ class Transformations
   def instead_of(&bloque)
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
-        params = metodo.parameters.map(&:last)
-        if key.class == Module or key.class == Class
-          instance = key
-        else
-          instance = key.singleton_class
-        end
+        instance = obtenerClaseDeUnObjeto key
         instance.send(:define_method, metodo.name) do |*args|
           self.instance_eval &bloque
         end

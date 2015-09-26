@@ -1,7 +1,7 @@
 require 'rspec'
 require_relative '../src/Aspects'
 require_relative '../src/MiClase'
-require_relative '../src/transformers/Transformations'
+require_relative '../src/Transformations'
 require_relative '../src/Aspects'
 
 describe Transformations do
