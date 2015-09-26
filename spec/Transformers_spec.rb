@@ -71,12 +71,28 @@ describe Transformations do
     expect(instancia.x).to eq 123
   end
 
-end
+  it 'test del before' do
+    Aspects.on MiClase do
+      transform(where name(/m1/)) do
+        before do |instance, cont, *args|
+          @x = 10
+          new_args = args.map{ |arg| arg * 10 }
+          cont.call(self, nil, *new_args)
+        end
+      end
+    end
+    instancia = MiClase.new
+
+    expect(instancia.m1(1, 2)).to eq 30
+    expect(instancia.x).to eq 10
+  end
 
 class Prueba
 
   def metodo(p1,p2)
     return (p1 + " - " + p2)
   end
+
+end
 
 end
