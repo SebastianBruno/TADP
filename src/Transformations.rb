@@ -63,7 +63,7 @@ class Transformations
           cont = Proc.new { |inst,cont,*arguments|
             inst.send(:"#{metodo.name}_before", *arguments)
           }
-          self.instance_exec self,cont,*args, &bloque
+          self.instance_exec self, cont, *args, &bloque
         end
       end
     end

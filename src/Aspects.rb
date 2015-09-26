@@ -28,13 +28,13 @@ class Aspects
         @objetos << objeto
       else
         #Si es una expresion regular, busca en las constantes de Object, las Clases o Modulos que matcheen
-        matcheadas = Object.constants.select { |symbol| !(symbol.to_s =~ objeto).nil?}
+        matcheadas = Object.constants.select { |symbol| symbol.to_s =~ objeto}
 
         #Si matchea la agrega solo si es una clase o un modulo
         matcheadas.each { |symbol|
 
-          @matcheado = Object.const_get(symbol)
-          @objetos << @matcheado if @matcheado.is_a? Class or @matcheado.is_a? Module
+          matcheado = Object.const_get(symbol)
+          @objetos << matcheado if matcheado.is_a? Class or matcheado.is_a? Module
         }
       end
     }

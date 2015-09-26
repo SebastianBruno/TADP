@@ -1,6 +1,6 @@
 module Funciones
   def obtenerClaseDeUnObjeto arg
-    if arg.class == Module or arg.class == Class
+    if arg.is_a? Module or arg.is_a? Class
       arg
     else
       arg.singleton_class
@@ -8,7 +8,7 @@ module Funciones
   end
 
   def obtenerMetodosdeUnObjeto arg
-    if arg.class == Class or arg.class == Module
+    if arg.is_a? Class or arg.is_a? Module
       arg.instance_methods(false)
     else
       arg.singleton_class.instance_methods(false)

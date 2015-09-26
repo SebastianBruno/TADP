@@ -25,9 +25,10 @@ class Conditions
   def name(regex)
     raise ArgumentError if regex.nil? or regex.eql? ''
 
-    return @objects_with_methods.values.flatten.select { |metodo|
-      metodo.name =~ regex
-    }.map do |metodo| metodo.name end
+    return @objects_with_methods.values.flatten.map do |metodo|
+      metodo.name end.select { |metodo|
+      metodo =~ regex
+    }
 
   end
 
@@ -77,17 +78,14 @@ class Conditions
 
   def where(*args)
     raise ArgumentError if args.nil? or args.count.eql? 0
-    metodos_totales = args[0]
-    args.each { |metodos_condicion|
-      metodos_totales = metodos_totales & metodos_condicion
-    }
+
+    metodos_totales = args.flatten.uniq
 
     @objects_with_methods = @objects_with_methods.each do |key,methods|
       @objects_with_methods[key] = methods.select do |method|
         metodos_totales.include? method.name
       end
     end
-
     metodos_totales
   end
 
