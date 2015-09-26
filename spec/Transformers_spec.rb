@@ -47,7 +47,7 @@ describe Transformations do
           cont.call(self, nil, *args)
         end
         after do |instance, *args|
-          @z = 456
+          @z = args[0]
         end
       end
     end
@@ -56,7 +56,7 @@ describe Transformations do
     instancia.m3(10)
     expect(instancia.w).to eq 123
     expect(instancia.x).to eq 10
-    expect(instancia.z).to eq 456
+    expect(instancia.z).to eq 10
   end
 
   it 'test del after' do

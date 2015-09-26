@@ -47,7 +47,7 @@ class Transformations
         instance.send(:alias_method, :"#{metodo.name}_after", metodo.name)
         instance.send(:define_method, metodo.name) do |*args|
           self.send(:"#{metodo.name}_after", *args)
-          self.instance_eval &bloque
+          self.instance_exec self,*args, &bloque
         end
       end
     end
