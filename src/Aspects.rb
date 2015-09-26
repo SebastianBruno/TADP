@@ -32,6 +32,7 @@ class Aspects
 
         #Si matchea la agrega solo si es una clase o un modulo
         matcheadas.each { |symbol|
+
           @matcheado = Object.const_get(symbol)
           @objetos << @matcheado if @matcheado.is_a? Class or @matcheado.is_a? Module
         }

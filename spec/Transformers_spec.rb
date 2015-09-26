@@ -39,6 +39,26 @@ describe Transformations do
     expect(A.new.saludar("Mundo")).to eq("Adiosin Mundo")
   end
 
+  it 'Before y After' do
+    Aspects.on MiClase, Prueba do
+      transform(where name(/m3/)) do
+        before do |instance, cont, *args|
+          @w = 123
+          cont.call(self, nil, *args)
+        end
+        after do |instance, *args|
+          @z = 456
+        end
+      end
+    end
+
+    instancia = MiClase.new
+    instancia.m3(10)
+    expect(instancia.w).to eq 123
+    expect(instancia.x).to eq 10
+    expect(instancia.z).to eq 456
+  end
+
   it 'test del after' do
     Aspects.on MiClase do
       transform(where name(/m2/)) do
@@ -71,6 +91,24 @@ describe Transformations do
     expect(instancia.x).to eq 123
   end
 
+  it 'Instead_of y After' do
+    Aspects.on MiClase do
+      transform(where name(/m3/)) do
+        instead_of do |instance, *args|
+          @x = 123
+        end
+        after do |instance, *args|
+          @z = 456
+        end
+      end
+    end
+
+    instancia = MiClase.new
+    instancia.m3(10)
+    expect(instancia.x).to eq 123
+    expect(instancia.z).to eq 456
+  end
+
   it 'test del before' do
     Aspects.on MiClase do
       transform(where name(/m1/)) do
@@ -86,13 +124,11 @@ describe Transformations do
     expect(instancia.m1(1, 2)).to eq 30
     expect(instancia.x).to eq 10
   end
-
+end
 class Prueba
 
   def metodo(p1,p2)
     return (p1 + " - " + p2)
   end
-
-end
 
 end

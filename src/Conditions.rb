@@ -27,9 +27,7 @@ class Conditions
 
     return @objects_with_methods.values.flatten.select { |metodo|
       metodo.name =~ regex
-    }.map do |metodo|
-      metodo.name
-    end
+    }.map do |metodo| metodo.name end
 
   end
 
@@ -83,6 +81,13 @@ class Conditions
     args.each { |metodos_condicion|
       metodos_totales = metodos_totales & metodos_condicion
     }
+
+    @objects_with_methods = @objects_with_methods.each do |key,methods|
+      @objects_with_methods[key] = methods.select do |method|
+        metodos_totales.include? method.name
+      end
+    end
+
     metodos_totales
   end
 
