@@ -42,7 +42,6 @@ class Transformations
   def after(&bloque)
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
-        params = metodo.parameters.map(&:last)
         instance = obtenerClaseDeUnObjeto key
         instance.send(:alias_method, :"#{metodo.name}_after", metodo.name)
         instance.send(:define_method, metodo.name) do |*args|
@@ -56,7 +55,6 @@ class Transformations
   def before(&bloque)
     @objects_with_methods.each_pair do |key, methods|
       methods.each do |metodo|
-        params = metodo.parameters.map(&:last)
         instance = obtenerClaseDeUnObjeto key
         instance.send(:alias_method, :"#{metodo.name}_before", metodo.name)
         instance.send(:define_method, metodo.name) do |*args|
