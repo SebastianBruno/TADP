@@ -7,7 +7,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
                     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
                     especie: Especie, estado: Estado) {
 
-  def ejecutarMovimiento(movimiento: Movimiento) = estado.ejecutarMovimiento(this, movimiento)
+  def ejecutarMovimiento(movimiento: Movimiento): Guerrero = movimiento(this)
 
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 

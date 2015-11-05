@@ -3,7 +3,7 @@ package tpScala
 import org.junit.Before
 import org.junit.Assert._
 import org.junit.Test
-import tpScala.Movement.Movimiento
+import tpScala.Movement.{cargarKi, Movimiento}
 
 class Tests {
   var guerrero: Guerrero = null
@@ -12,7 +12,7 @@ class Tests {
   def setUp() = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Santi", items, movimientos, 4, 40, Androide, null)
+    guerrero = new Guerrero("Santi", items, movimientos, 4, 40, Androide, Inconsciente)
   }
 
   @Test
@@ -21,5 +21,16 @@ class Tests {
     assertEquals(14, guerrero.ki)
   }
 
+  @Test
+  def unAndroideIntentaDescansarParaCargarSuKiPeroNoCargaNada() = {
+    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    assertEquals(4, guerrero.ki)
+  }
+
+  @Test
+  def unHumanoDescansaParaAumentarSuKiYLoLogra = {
+    /*guerrero = new DGB.Guerrero("Santi", items, movimientos, 4, 40, DGB.Humano, null)
+    assertEquals(4, guerrero.ki)*/
+  }
 
 }
