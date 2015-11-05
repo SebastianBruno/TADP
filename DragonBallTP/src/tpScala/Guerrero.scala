@@ -23,10 +23,10 @@ object DGB{
   case class SuperSaiyajin(nivel: Int = 0) extends Transformacion
 
   trait Estado {
-    def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento)
+    def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento):Guerrero
   }
   case object Inconsciente extends Estado {
-    def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento) = {}
+    def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento) = { guerrero }
   }
   case class Guerrero(nombre: String,
       items: Array[Item] = Array(),
@@ -35,7 +35,7 @@ object DGB{
       kiMaximo: Int,
       especie: Especie,
       estado: Estado) {
-    def ejecutarMovimiento(movimiento: Movimiento) = estado.ejecutarMovimiento(this, movimiento)
+    def ejecutarMovimiento(movimiento: Movimiento) = movimiento(this)
     def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
     def disminuirKi(cuanto: Int) = {
       if (cuanto > ki) copy(ki = 0)
