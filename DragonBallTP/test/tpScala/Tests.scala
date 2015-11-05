@@ -3,15 +3,16 @@ package tpScala
 import org.junit.Before
 import org.junit.Assert._
 import org.junit.Test
+import tpScala.Movement.Movimiento
 
 class Tests {
-  var guerrero: DGB.Guerrero = null
+  var guerrero: Guerrero = null
 
   @Before
   def setUp() = {
-    val items = Array[DGB.Item]()
-    val movimientos = Array[DGB.Movimiento]()
-    guerrero = new DGB.Guerrero("Santi", items, movimientos, 4, 40, DGB.Androide, null)
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Santi", items, movimientos, 4, 40, Androide, null)
   }
 
   @Test
@@ -19,4 +20,6 @@ class Tests {
     guerrero = guerrero.aumentarKi(10)
     assertEquals(14, guerrero.ki)
   }
+
+
 }
