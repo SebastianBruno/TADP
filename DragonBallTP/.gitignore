@@ -1,1 +1,6 @@
 /bin/
+.idea*
+.lock
+DragonBallTP/out/
+.iml*
+DragonBallTP/.idea/
