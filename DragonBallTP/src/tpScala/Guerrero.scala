@@ -2,14 +2,13 @@ package tpScala
 
 import tpScala.Movement.Movimiento
 
-import scala.Option
-
-
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
                     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
                     especie: Especie, estado: Estado) {
 
-  def ejecutarMovimiento(movimiento: Movimiento): Guerrero = movimiento(this)
+  def ejecutarMovimiento(movimiento: Movimiento): Guerrero = {
+    estado.ejecutarMovimiento(this, movimiento)
+  }
 
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 

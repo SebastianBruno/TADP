@@ -8,5 +8,15 @@ trait Estado {
 }
 
 case object Inconsciente extends Estado {
-  def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento) = ???
+  def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento) = {
+    movimiento match {
+      case cargarKi => guerrero
+    }
+  }
+}
+
+case object Consciente extends Estado {
+  def ejecutarMovimiento(guerrero: Guerrero, movimiento: Movimiento) = {
+      movimiento(guerrero)
+  }
 }
