@@ -2,12 +2,17 @@ package tpScala
 
 import tpScala.Movement.Movimiento
 
+
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
                     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
                     especie: Especie, estado: Estado) {
 
   def ejecutarMovimiento(movimiento: Movimiento): Guerrero = {
     movimiento.apply(this);
+  }
+
+  def hechizar(ataque: (Guerrero,Guerrero) =>  List[Guerrero], atacado: Guerrero): List[Guerrero] = {
+    ataque.apply(this, atacado)
   }
 
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
@@ -29,7 +34,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
       case (Semilla, _) => copy(ki = kiMaximo)
     }
   }
-
 
   def disminuirKi(cuanto: Int) = {
     if (cuanto > ki) copy(ki = 0)
