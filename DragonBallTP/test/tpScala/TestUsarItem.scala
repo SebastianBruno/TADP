@@ -21,6 +21,53 @@ class TestUsarItem {
     assertEquals(99, enemigo.ki)
   }
 
+  @Test
+  def unGuerreroAtacaConUnArmaFilosaAUnSaiyajinConCola() = {
+    enemigo = enemigo.copy(especie = Saiyajin(true, None))
+    enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
+
+    assertEquals(1, enemigo.ki)
+    assertEquals(Saiyajin(false, None), enemigo.especie)
+  }
+
+  @Test
+  def unGuerreroAtacaConUnArmaFilosaAUnSuperSaiyajinConCola() = {
+    enemigo = enemigo.copy(especie = Saiyajin(true, Option(SuperSaiyajin(1))))
+    enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
+
+    assertEquals(1, enemigo.ki)
+    assertEquals(Saiyajin(false,Some(SuperSaiyajin(1))), enemigo.especie)
+  }
+
+  @Test
+  def unAtaqueDeArmaRomaDejaInconscienteAUnGuerrer() = {
+    atacante = atacante.copy(items =  Array[Item](ArmaRoma))
+
+    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+
+    assertEquals(enemigo.estado, Inconsciente)
+  }
+
+  @Test
+  def unAtaqueDeArmaRomaNoLeHaceNadaALosAndroides() = {
+    atacante = atacante.copy(items =  Array[Item](ArmaRoma))
+    enemigo = enemigo.copy(especie = Androide)
+    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+
+    assertEquals(enemigo.estado, Consciente)
+    assertEquals(enemigo.ki, 100)
+  }
+
+  @Test
+  def unAtaqueDeArmaRomaNoLeHaceNadaAUnGuerreroConMasDe300DeKi() = {
+    atacante = atacante.copy(items =  Array[Item](ArmaRoma))
+    enemigo = enemigo.copy(ki = 500)
+
+    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+
+    assertEquals(enemigo.estado, Consciente)
+  }
+
   @Test(expected=classOf[RuntimeException])
   def unGuerreroAtacaConUnArmaQueNoTiene() = {
     enemigo.recibirAtaque(atacante, ArmaRoma)
