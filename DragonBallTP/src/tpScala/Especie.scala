@@ -32,5 +32,6 @@ case class Saiyajin(cola: Boolean = true, transformacion: Option[Transformacion]
   }
 }
 
-
-
+case object Fusion extends Especie {
+  override def convertimeEnMono(guerrero: Guerrero): Unit = ???
+}
