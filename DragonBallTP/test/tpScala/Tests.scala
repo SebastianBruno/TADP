@@ -60,4 +60,26 @@ class Tests {
     assertEquals(154, guerrero.ki)
   }
 
+  @Test
+  def unMonstruoDescansaParaAumentarSuKiYLoLogra = {
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Cell", items, movimientos, 4, 40, Monstruo, null)
+
+    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+
+    assertEquals(104, guerrero.ki)
+  }
+
+  @Test
+  def unNamekuDescansaParaAumentarSuKiYLoLogra = {
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Picollo", items, movimientos, 4, 40, Namekusein, null)
+
+    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+
+    assertEquals(104, guerrero.ki)
+  }
+
 }
