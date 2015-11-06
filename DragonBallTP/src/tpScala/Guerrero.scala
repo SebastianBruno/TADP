@@ -13,18 +13,18 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 
   def recibirAtaque(atacante: Guerrero, arma: Item): Guerrero = {
-    if(!atacante.tieneItem(arma)) {
+    if (!atacante.tieneItem(arma)) {
       throw new RuntimeException("El atacante no posee ese arma!")
     }
 
     (arma, especie) match {
       case (ArmaRoma, Androide) => this
-      case (ArmaRoma, _) => if(ki < 300) copy(estado = Inconsciente) else this
+      case (ArmaRoma, _) => if (ki < 300) copy(estado = Inconsciente) else this
       case (ArmaFilosa, Saiyajin(true, Some(MonoGigante))) => copy(especie = Saiyajin(false, None), estado = Inconsciente)
       case (ArmaFilosa, Saiyajin(true, transformacion)) => copy(especie = Saiyajin(false, transformacion), ki = 1)
       case (ArmaFilosa, _) => copy(ki = ki - (atacante.ki / 100))
       case (ArmaFuego(muni), Humano) => copy(ki = ki - 20)
-      case (ArmaFuego(muni), Namekusein) => if(estado == Inconsciente) copy(ki = ki - 10) else this
+      case (ArmaFuego(muni), Namekusein) => if (estado == Inconsciente) copy(ki = ki - 10) else this
       case (Semilla, Androide) => this
       case (Semilla, _) => copy(ki = kiMaximo)
     }
@@ -57,6 +57,15 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
       case Saiyajin(_, Some(MonoGigante)) => throw new RuntimeException("Ya es mono!")
       case Saiyajin(true, _) => copy(especie = Saiyajin(true, Option(MonoGigante)), ki = kiMaximo, kiMaximo = kiMaximo * 3)
       case _ => throw new RuntimeException("No puede convertirse en mono!")
+    }
+  }
+  
+  def fusionarseCon(otroGuerrero: Guerrero): Guerrero = {
+    (especie, otroGuerrero.especie) match {
+      case (Humano | Saiyajin(_,_) | Namekusein, Humano | Saiyajin(_,_) | Namekusein) => copy(especie = Fusion, 
+          nombre = nombre ++ otroGuerrero.nombre, ki = ki + otroGuerrero.ki, kiMaximo= kiMaximo + otroGuerrero.kiMaximo,
+          movimientos = movimientos ++ otroGuerrero.movimientos, items = items ++ otroGuerrero.items) // Agrego los items porque quedaba medio cualquiera sino
+      case _ => throw new RuntimeException("No pueden fusionarse!")
     }
   }
 

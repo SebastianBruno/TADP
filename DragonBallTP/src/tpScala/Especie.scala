@@ -36,5 +36,4 @@ case class SuperSaiyajin(cola :Boolean = true, nivel: Int = 1) extends Especie {
 
 }
 
-
-
+case object Fusion extends Especie 
