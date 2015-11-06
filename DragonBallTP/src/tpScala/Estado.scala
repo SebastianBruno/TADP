@@ -25,3 +25,7 @@ case object Muerto extends Estado {
     movimiento(guerrero)
   }
 }
+
+object Estado {
+  val estados = List(Consciente, Inconsciente)
+}

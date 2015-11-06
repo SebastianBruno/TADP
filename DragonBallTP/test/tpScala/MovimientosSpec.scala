@@ -3,6 +3,7 @@ package tpScala
 import org.junit.Assert._
 import org.junit.{Test, Before}
 import tpScala.Movement._
+import utils.RandomFaked
 
 class MovimientosSpec {
   var guerrero: Guerrero = null
@@ -126,6 +127,35 @@ class MovimientosSpec {
     assertEquals(Namekusein, nuevoGuerrero.especie)
   }
 
+  @Test
+  def hechizoAlAtacanteCon7EsferasDelDragon = {
+    val atacante = new Guerrero("Picollo", Array(EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon), Array.empty , 21, 40, Humano, Inconsciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
+
+    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+
+    assertEquals(Consciente, guerrerosResultado(0).estado)
+  }
+
+  @Test
+  def hechizoDeUnNamekusein = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Namekusein, Inconsciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
+
+    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+
+    assertEquals(Consciente, guerrerosResultado(0).estado)
+  }
+
+  @Test
+  def hechizoDeUnHumanoNoEsValido = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Humano, Inconsciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
+
+    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+
+    assertEquals(Inconsciente, guerrerosResultado(0).estado)
+  }
 
 
 }

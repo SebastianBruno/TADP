@@ -6,13 +6,22 @@ trait Especie {
 
   def siguienteNivel(): Especie = ???
 
+  def puedoHechizar() = false
+
 }
 
 case object Androide extends Especie
 
-case object Namekusein extends Especie
+case object Namekusein extends Especie {
+  override def puedoHechizar() = true
+}
 
-case object Monstruo extends Especie
+case object Monstruo extends Especie {
+
+  override def puedoHechizar() = true
+
+}
+
 
 case object Humano extends Especie
 

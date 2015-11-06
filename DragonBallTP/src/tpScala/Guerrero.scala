@@ -10,6 +10,10 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     movimiento.apply(this);
   }
 
+  def hechizar(ataque: (Guerrero, Guerrero) => List[Guerrero], atacado: Guerrero): List[Guerrero] = {
+    ataque.apply(this, atacado)
+  }
+
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 
   def recibirAtaque(atacante: Guerrero, arma: Item): Guerrero = {
@@ -30,18 +34,13 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }
 
-  def disminuirKi(cuanto: Int): Guerrero = {
-    val nuevo = (cuanto > ki) match {
+  def disminuirKi(cuanto: Int): Guerrero =
+    (cuanto > ki) match {
       case true => muere
       case false => this.copy(ki = ki - cuanto)
     }
-    println(nuevo.ki)
-    nuevo
-  }
 
-  def muere(): Guerrero = {
-    copy(ki = 0, estado = Muerto)
-  }
+  def muere(): Guerrero = copy(ki = 0, estado = Muerto)
 
   def cambiarEstado(estadoNuevo: Option[Estado] = None) = {
     estadoNuevo match {
@@ -50,14 +49,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
       case _ => Unit
     }
   }
-
-  /*def perderCola() {
-    especie match {
-      case Saiyajin(true, MonoGigante) => copy(especie = Saiyajin(false, None), /*estado = Inconsciente,*/ ki = 1, kiMaximo = kiMaximo / 3)
-      case Saiyajin(true, transformacion) => copy(especie = Saiyajin(false, transformacion), ki = 1)
-      case _ => throw new RuntimeException("Esta especie no tiene cola")
-    }
-  }*/
 
   def convertirseEnMono(): Guerrero = {
     especie match {
