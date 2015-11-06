@@ -15,7 +15,7 @@ object Movement {
     def apply(guerrero: Guerrero) = {
       guerrero.especie match {
         case Androide => guerrero
-        case Saiyajin(_, SuperSaiyajin(nivel)) if nivel != 0 => guerrero.aumentarKi(nivel * 150)
+        case Saiyajin(_, Some(SuperSaiyajin(nivel))) if nivel != 0 => guerrero.aumentarKi(nivel * 150)
         case _ => guerrero.aumentarKi(100)
       }
     }
@@ -24,7 +24,7 @@ object Movement {
   case class convertirseEnMono() {
     def apply(guerrero: Guerrero) = {
       guerrero.especie match {
-        case Saiyajin(true, _) if guerrero.tieneItem(fotoLuna) => guerrero.convertirseEnMono()
+        case Saiyajin(true, _) if guerrero.tieneItem(FotoLuna) => guerrero.convertirseEnMono()
         case _ => throw new RuntimeException("No puede convertirse en mono!")
       }
     }
