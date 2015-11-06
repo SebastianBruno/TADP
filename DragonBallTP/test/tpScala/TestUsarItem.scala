@@ -9,7 +9,7 @@ class TestUsarItem {
   def unGuerreroAtacaConUnArmaFilosa() = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    /*def atacante = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide, Inconsciente)
-    def enemigo = new Guerrero("Picollo", items, movimientos, 100, 200, Namekusein, )*/
+    def atacante = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide, Consciente)
+    def enemigo = new Guerrero("Picollo", items, movimientos, 100, 200, Namekusein, Consciente)
   }
 }

@@ -11,7 +11,7 @@ class TestCargarKi {
   def setUp() = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide, Inconsciente)
+    guerrero = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide, Consciente)
   }
 
   @Test
@@ -52,7 +52,7 @@ class TestCargarKi {
   def unSaiyajinDescansaParaAumentarSuKiYLoLogra = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Vegetta", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = None), null)
+    guerrero = new Guerrero("Vegetta", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = None), Consciente)
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
@@ -63,7 +63,7 @@ class TestCargarKi {
   def unSuperSaiyajinDescansaParaAumentarSuKiYLoLogra = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Goku", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = Some(SuperSaiyajin(nivel = 1))), null)
+    guerrero = new Guerrero("Goku", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = Some(SuperSaiyajin(nivel = 1))), Consciente)
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
@@ -74,7 +74,7 @@ class TestCargarKi {
   def unMonstruoDescansaParaAumentarSuKiYLoLogra = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Cell", items, movimientos, 4, 40, Monstruo, null)
+    guerrero = new Guerrero("Cell", items, movimientos, 4, 40, Monstruo, Consciente)
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
@@ -85,7 +85,7 @@ class TestCargarKi {
   def unNamekuDescansaParaAumentarSuKiYLoLogra = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Picollo", items, movimientos, 4, 40, Namekusein, null)
+    guerrero = new Guerrero("Picollo", items, movimientos, 4, 40, Namekusein, Consciente)
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
