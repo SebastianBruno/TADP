@@ -2,7 +2,7 @@ package tpScala
 
 object Movement {
 
-  type Movimiento = Function1[Guerrero, Guerrero]
+  type Movimiento = (Guerrero =>  Guerrero)
 
 
   case object dejarseFajar extends Movimiento {
@@ -21,7 +21,7 @@ object Movement {
     }
   }
 
-  case class convertirseEnMono() {
+  case object convertirseEnMono extends Movimiento{
     def apply(guerrero: Guerrero) = {
       guerrero.especie match {
         case Saiyajin(true, _) if guerrero.tieneItem(FotoLuna) => guerrero.convertirseEnMono()

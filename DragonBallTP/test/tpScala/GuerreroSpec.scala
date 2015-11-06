@@ -3,10 +3,9 @@ package tpScala
 import org.junit.Before
 import org.junit.Assert._
 import org.junit.Test
-import tpScala.Movement.{ cargarKi, Movimiento }
-import tpScala.Movement.dejarseFajar
+import tpScala.Movement.{convertirseEnMono, cargarKi, Movimiento}
 import tpScala.Movement.convertirseEnMono
-
+import tpScala.Movement.dejarseFajar
 class GuerreroSpec {
   var santiElSaiyajin: Guerrero = null
   var diegoElHumanoInservible: Guerrero = null
@@ -36,8 +35,8 @@ class GuerreroSpec {
 
   @Test
   def unAndroideIntentaDescansarParaCargarSuKiPeroNoCargaNada() = {
-    santiElSaiyajin = santiElSaiyajin.ejecutarMovimiento(cargarKi)
-    assertEquals(4, santiElSaiyajin.ki)
+    santiElSaiyajin = matiElAndroide.ejecutarMovimiento(cargarKi)
+    assertEquals(10, matiElAndroide.ki)
   }
 
   @Test
@@ -46,6 +45,15 @@ class GuerreroSpec {
     assertEquals(4, guerrero.ki)*/
   }
 
+  @Test
+  def convertirseEnMonoOK(): Unit ={
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento](convertirseEnMono)
+
+    santiElSaiyajin = new Guerrero("Santi", items, movimientos, 4, 40, Androide, Inconsciente)
+
+
+  }
   @Test
   def unSaiyajinSeFusionaConUnHumanoConExito = {
     santiFusionado = santiElSaiyajin.fusionarseCon(diegoElHumanoInservible)
@@ -56,6 +64,5 @@ class GuerreroSpec {
   
   @Test (expected = classOf[RuntimeException])
   def unSaiyajinNoLograFusionarseConUnAndroide {
-      santiFusionado = santiElSaiyajin.fusionarseCon(matiElAndroide)
-  } 
+      santiFusionado = santiElSaiyajin.fusionarseCon(matiElAndroide)}
 }
