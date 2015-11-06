@@ -45,7 +45,7 @@ class TestCargarKi {
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(4, guerrero.ki)
+    assertEquals(104, guerrero.ki)
   }
 
   @Test

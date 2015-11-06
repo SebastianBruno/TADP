@@ -7,7 +7,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
                     especie: Especie, estado: Estado) {
 
   def ejecutarMovimiento(movimiento: Movimiento): Guerrero = {
-    estado.ejecutarMovimiento(this, movimiento)
+    movimiento.apply(this);
   }
 
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
@@ -52,7 +52,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }*/
 
-  def convertirseEnMono() {
+  def convertirseEnMono(): Guerrero = {
     especie match {
       case Saiyajin(_, Some(MonoGigante)) => throw new RuntimeException("Ya es mono!")
       case Saiyajin(true, _) => copy(especie = Saiyajin(true, Option(MonoGigante)), ki = kiMaximo, kiMaximo = kiMaximo * 3)
