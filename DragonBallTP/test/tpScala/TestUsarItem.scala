@@ -32,11 +32,11 @@ class TestUsarItem {
 
   @Test
   def unGuerreroAtacaConUnArmaFilosaAUnSuperSaiyajinConCola() = {
-    enemigo = enemigo.copy(especie = Saiyajin(true, Option(SuperSaiyajin(1))))
+    enemigo = enemigo.copy(especie = Saiyajin(true, None))
     enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
 
     assertEquals(1, enemigo.ki)
-    assertEquals(Saiyajin(false,Some(SuperSaiyajin(1))), enemigo.especie)
+    assertEquals(Saiyajin(false,None), enemigo.especie)
   }
 
   @Test

@@ -63,7 +63,7 @@ class TestCargarKi {
   def unSuperSaiyajinDescansaParaAumentarSuKiYLoLogra = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Goku", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = Some(SuperSaiyajin(nivel = 1))), Consciente)
+    guerrero = new Guerrero("Goku", items, movimientos, 4, 40, SuperSaiyajin(cola = true), Consciente)
 
     guerrero = guerrero.ejecutarMovimiento(cargarKi)
 
