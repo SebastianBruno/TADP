@@ -4,7 +4,7 @@ import org.junit.Assert._
 import org.junit.{Test, Before}
 import tpScala.Movement._
 
-class TestCargarKi {
+class MovimientosSpec {
   var guerrero: Guerrero = null
 
   @Before
@@ -91,4 +91,41 @@ class TestCargarKi {
 
     assertEquals(104, guerrero.ki)
   }
+
+  @Test
+  def unSaiyajinSeConvierteEnSuperSaiyajin = {
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, Saiyajin(), Consciente)
+
+    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+
+    assertEquals(SuperSaiyajin(true, nivel = 1), nuevoGuerrero.especie)
+
+  }
+
+  @Test
+  def unSuperSaiyajinDebeSolamenteSubirElNivel() = {
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, SuperSaiyajin(), Consciente)
+
+    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+
+    assertEquals(SuperSaiyajin(true, nivel = 2), nuevoGuerrero.especie)
+  }
+
+  @Test
+  def siNoEsSaiyajinOSuperSaiyajinNoSeDebeConvertir = {
+    val items = Array[Item]()
+    val movimientos = Array[Movimiento]()
+    guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, Namekusein, Consciente)
+
+    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+
+    assertEquals(Namekusein, nuevoGuerrero.especie)
+  }
+
+
+
 }
