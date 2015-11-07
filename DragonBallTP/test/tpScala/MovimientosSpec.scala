@@ -23,8 +23,8 @@ class MovimientosSpec {
 
   @Test
   def unAndroideIntentaDescansarParaCargarSuKiPeroNoCargaNada() = {
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
-    assertEquals(4, guerrero.ki)
+    val result = guerrero.ejecutarMovimiento(cargarKi)
+    assertEquals(4, result._1.ki)
   }
 
   @Test
@@ -33,9 +33,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Krillin", items, movimientos, 4, 40, Humano, Consciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    val result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(104, guerrero.ki)
+    assertEquals(104, result._1.ki)
   }
 
   @Test
@@ -44,9 +44,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Krillin", items, movimientos, 4, 40, Humano, Inconsciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    val result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(104, guerrero.ki)
+    assertEquals(4, result._1.ki)
   }
 
   @Test
@@ -55,9 +55,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Vegetta", items, movimientos, 4, 40, Saiyajin(cola = true, transformacion = None), Consciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    var result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(104, guerrero.ki)
+    assertEquals(104, result._1.ki)
   }
 
   @Test
@@ -66,9 +66,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Goku", items, movimientos, 4, 40, SuperSaiyajin(cola = true), Consciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    var result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(154, guerrero.ki)
+    assertEquals(154, result._1.ki)
   }
 
   @Test
@@ -77,9 +77,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Cell", items, movimientos, 4, 40, Monstruo, Consciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    var result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(104, guerrero.ki)
+    assertEquals(104, result._1.ki)
   }
 
   @Test
@@ -88,9 +88,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Picollo", items, movimientos, 4, 40, Namekusein, Consciente)
 
-    guerrero = guerrero.ejecutarMovimiento(cargarKi)
+    var result = guerrero.ejecutarMovimiento(cargarKi)
 
-    assertEquals(104, guerrero.ki)
+    assertEquals(104, result._1.ki)
   }
 
   @Test
@@ -99,9 +99,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, Saiyajin(), Consciente)
 
-    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+    val result = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
 
-    assertEquals(SuperSaiyajin(true, nivel = 1), nuevoGuerrero.especie)
+    assertEquals(SuperSaiyajin(true, nivel = 1), result._1.especie)
 
   }
 
@@ -111,9 +111,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, SuperSaiyajin(), Consciente)
 
-    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+    val result = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
 
-    assertEquals(SuperSaiyajin(true, nivel = 2), nuevoGuerrero.especie)
+    assertEquals(SuperSaiyajin(true, nivel = 2), result._1.especie)
   }
 
   @Test
@@ -122,9 +122,9 @@ class MovimientosSpec {
     val movimientos = Array[Movimiento]()
     guerrero = new Guerrero("Picollo", items, movimientos, 21, 40, Namekusein, Consciente)
 
-    val nuevoGuerrero = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
+    val result = guerrero.ejecutarMovimiento(convertirseEnSuperSaiyajin)
 
-    assertEquals(Namekusein, nuevoGuerrero.especie)
+    assertEquals(Namekusein, result._1.especie)
   }
 
   @Test

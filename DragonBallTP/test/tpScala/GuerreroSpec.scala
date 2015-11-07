@@ -35,8 +35,8 @@ class GuerreroSpec {
 
   @Test
   def unAndroideIntentaDescansarParaCargarSuKiPeroNoCargaNada() = {
-    santiElSaiyajin = matiElAndroide.ejecutarMovimiento(cargarKi)
-    assertEquals(10, matiElAndroide.ki)
+    var result = matiElAndroide.ejecutarMovimiento(cargarKi)
+    assertEquals(10, result._1.ki)
   }
 
   @Test

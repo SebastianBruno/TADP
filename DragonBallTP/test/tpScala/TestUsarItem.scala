@@ -16,46 +16,46 @@ class TestUsarItem {
   }
   @Test
   def unGuerreroAtacaConUnArmaFilosa() = {
-    enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaFilosa), Some(enemigo))
 
-    assertEquals(99, enemigo.ki)
+    assertEquals(99, result._2.get.ki)
   }
 
   @Test
   def unGuerreroAtacaConUnArmaFilosaAUnSaiyajinConCola() = {
     enemigo = enemigo.copy(especie = Saiyajin(true, None))
-    enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaFilosa), Some(enemigo))
 
-    assertEquals(1, enemigo.ki)
-    assertEquals(Saiyajin(false, None), enemigo.especie)
+    assertEquals(1, result._2.get.ki)
+    assertEquals(Saiyajin(false, None), result._2.get.especie)
   }
 
   @Test
   def unGuerreroAtacaConUnArmaFilosaAUnSuperSaiyajinConCola() = {
     enemigo = enemigo.copy(especie = Saiyajin(true, None))
-    enemigo = enemigo.recibirAtaque(atacante, ArmaFilosa)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaFilosa), Some(enemigo))
 
-    assertEquals(1, enemigo.ki)
-    assertEquals(Saiyajin(false,None), enemigo.especie)
+    assertEquals(1, result._2.get.ki)
+    assertEquals(Saiyajin(false,None), result._2.get.especie)
   }
 
   @Test
   def unAtaqueDeArmaRomaDejaInconscienteAUnGuerrer() = {
     atacante = atacante.copy(items =  Array[Item](ArmaRoma))
 
-    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaRoma), Some(enemigo))
 
-    assertEquals(enemigo.estado, Inconsciente)
+    assertEquals(result._2.get.estado, Inconsciente)
   }
 
   @Test
   def unAtaqueDeArmaRomaNoLeHaceNadaALosAndroides() = {
     atacante = atacante.copy(items =  Array[Item](ArmaRoma))
     enemigo = enemigo.copy(especie = Androide)
-    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaRoma), Some(enemigo))
 
-    assertEquals(enemigo.estado, Consciente)
-    assertEquals(enemigo.ki, 100)
+    assertEquals(result._2.get.estado, Consciente)
+    assertEquals(result._2.get.ki, 100)
   }
 
   @Test
@@ -63,14 +63,14 @@ class TestUsarItem {
     atacante = atacante.copy(items =  Array[Item](ArmaRoma))
     enemigo = enemigo.copy(ki = 500)
 
-    enemigo = enemigo.recibirAtaque(atacante, ArmaRoma)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaRoma), Some(enemigo))
 
-    assertEquals(enemigo.estado, Consciente)
+    assertEquals(result._2.get.estado, Consciente)
   }
 
   @Test(expected=classOf[RuntimeException])
   def unGuerreroAtacaConUnArmaQueNoTiene() = {
-    enemigo.recibirAtaque(atacante, ArmaRoma)
-    assertEquals("sfdaf", enemigo.ki)
+    val result = atacante.ejecutarMovimiento(usarItem, Some(ArmaRoma), Some(enemigo))
+    assertEquals("sfdaf", result._2.get.ki)
   }
 }
