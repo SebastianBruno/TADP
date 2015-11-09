@@ -6,17 +6,17 @@ import utils.Random
 
 object Movement {
 
-  type Movimiento = ((Guerrero, Option[Guerrero], Option[Item])) => ((Guerrero, Option[Guerrero]))
+  type Movimiento = ((Guerrero, Option[Guerrero])) => ((Guerrero, Option[Guerrero]))
   type Accion = (Guerrero, Guerrero) => List[Guerrero]
 
   case object dejarseFajar extends Movimiento {
-    def apply(args: (Guerrero, Option[Guerrero], Option[Item])) = {
+    def apply(args: (Guerrero, Option[Guerrero])) = {
       (args._1, args._2)
     }
   }
 
   case object cargarKi extends Movimiento {
-    def apply(args: (Guerrero, Option[Guerrero], Option[Item])) = {
+    def apply(args: (Guerrero, Option[Guerrero])) = {
       val guerrero = args._1
       guerrero.especie match {
         case Androide => (guerrero,args._2)
@@ -26,15 +26,18 @@ object Movement {
     }
   }
 
-  case object usarItem extends Movimiento {
-    def apply(args: (Guerrero, Option[Guerrero], Option[Item])) = {
+  case class usarItem(item: Item) extends Movimiento {
+
+    var elMovimientoConItem:Movimiento = crearMovimientoConItem(_)(item)
+
+    def crearMovimientoConItem(args: (Guerrero, Option[Guerrero]))(item: Item): (Guerrero, Option[Guerrero]) = {
       val atacante = args._1
       val atacado = args._2.get
-      val arma = args._3.get
+      val arma = item
 
       if (!atacante.tieneItem(arma)) {
-        throw new RuntimeException("El atacante no posee ese arma!")
-      }
+      throw new RuntimeException("El atacante no posee ese arma!")
+    }
 
       (arma, atacado.especie) match {
         case (ArmaRoma, Androide) => (atacante,Some(atacado))
@@ -48,10 +51,14 @@ object Movement {
         case (Semilla, _) => (atacante, Some(atacado.copy(ki = atacado.kiMaximo)))
       }
     }
+
+    def apply(args: (Guerrero, Option[Guerrero])) = {
+      elMovimientoConItem(args)
+    }
   }
 
   case object convertirseEnMono extends Movimiento{
-    def apply(args: (Guerrero, Option[Guerrero], Option[Item])) = {
+    def apply(args: (Guerrero, Option[Guerrero])) = {
       val guerrero = args._1
       guerrero.especie match {
         case Saiyajin(true, _) if guerrero.tieneItem(FotoLuna) => (guerrero.convertirseEnMono(),args._2)
@@ -61,7 +68,7 @@ object Movement {
   }
 
   case object convertirseEnSuperSaiyajin extends Movimiento {
-    def apply(args: (Guerrero, Option[Guerrero], Option[Item])) = {
+    def apply(args: (Guerrero, Option[Guerrero])) = {
       val guerrero = args._1
       guerrero.especie match {
         case Saiyajin(_, _) | SuperSaiyajin(_, _) if guerrero.ki > (guerrero.kiMaximo / 2) => (guerrero.copy(especie = guerrero.especie.siguienteNivel), args._2)

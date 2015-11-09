@@ -6,9 +6,9 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
     especie: Especie, estado: Estado) {
 
-  def ejecutarMovimiento(movimiento: Movimiento, arma: Option[Item] = None, enemigo: Option[Guerrero] = None): (Guerrero, Option[Guerrero]) = {
+  def ejecutarMovimiento(movimiento: Movimiento, enemigo: Option[Guerrero] = None): (Guerrero, Option[Guerrero]) = {
     if (estado == Consciente) {
-      return movimiento.apply((this, enemigo, arma))
+      return movimiento.apply((this, enemigo))
     }
 
     return (this, enemigo)
