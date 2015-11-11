@@ -14,10 +14,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     return EstadoBatalla(this, enemigo)
   }
 
-  def hechizar(ataque: Movimiento, atacado: Guerrero): EstadoBatalla = {
-    ataque.apply(EstadoBatalla(this, Option(atacado)))
-  }
-
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 
   def disminuirKi(cuanto: Int): Guerrero =

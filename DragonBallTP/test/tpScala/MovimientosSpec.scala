@@ -129,32 +129,32 @@ class MovimientosSpec {
 
   @Test
   def hechizoAlAtacanteCon7EsferasDelDragon = {
-    val atacante = new Guerrero("Picollo", Array(EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon), Array.empty , 21, 40, Humano, Inconsciente)
+    val atacante = new Guerrero("Picollo", Array(EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon,EsferaDragon), Array.empty , 21, 40, Humano, Consciente)
     val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
 
-    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+    val guerrerosResultado = atacante.ejecutarMovimiento(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), Some(atacado))
 
     assertEquals(Consciente, guerrerosResultado.atacante.estado)
   }
 
   @Test
   def hechizoDeUnNamekusein = {
-    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Namekusein, Inconsciente)
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Namekusein, Consciente)
     val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
 
-    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+    val guerrerosResultado = atacante.ejecutarMovimiento(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), Some(atacado))
 
     assertEquals(Consciente, guerrerosResultado.atacante.estado)
   }
 
   @Test
   def hechizoDeUnHumanoNoEsValido = {
-    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Humano, Inconsciente)
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 21, 40, Humano, Consciente)
     val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
 
-    val guerrerosResultado = atacante.hechizar(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), atacado)
+    val guerrerosResultado = atacante.ejecutarMovimiento(Hechizar(RandomFaked(0), List(Consciente, Inconsciente)), Some(atacado))
 
-    assertEquals(Inconsciente, guerrerosResultado.atacante.estado)
+    assertEquals(Consciente, guerrerosResultado.atacante.estado)
   }
 
 
