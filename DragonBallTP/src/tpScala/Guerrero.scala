@@ -1,21 +1,21 @@
 package tpScala
 
-import tpScala.Movement.Movimiento
+import tpScala.Movement.{EstadoBatalla, Movimiento}
 
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
     especie: Especie, estado: Estado) {
 
-  def ejecutarMovimiento(movimiento: Movimiento, enemigo: Option[Guerrero] = None): (Guerrero, Option[Guerrero]) = {
+  def ejecutarMovimiento(movimiento: Movimiento, enemigo: Option[Guerrero] = None): EstadoBatalla = {
     if (estado == Consciente) {
-      return movimiento.apply((this, enemigo))
+      return movimiento.apply(EstadoBatalla(this, enemigo))
     }
 
-    return (this, enemigo)
+    return EstadoBatalla(this, enemigo)
   }
 
-  def hechizar(ataque: (Guerrero, Guerrero) => List[Guerrero], atacado: Guerrero): List[Guerrero] = {
-    ataque.apply(this, atacado)
+  def hechizar(ataque: Movimiento, atacado: Guerrero): EstadoBatalla = {
+    ataque.apply(EstadoBatalla(this, Option(atacado)))
   }
 
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)

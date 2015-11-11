@@ -1,11 +1,8 @@
 package tpScala
 
-import org.junit.Before
 import org.junit.Assert._
-import org.junit.Test
-import tpScala.Movement.{ convertirseEnMono, cargarKi, Movimiento }
-import tpScala.Movement.convertirseEnMono
-import tpScala.Movement.dejarseFajar
+import org.junit.{Before, Test}
+import tpScala.Movement.{Movimiento, cargarKi, convertirseEnMono, dejarseFajar}
 class GuerreroSpec {
   var santiElSaiyajin: Guerrero = null
   var diegoElHumanoInservible: Guerrero = null
@@ -36,7 +33,7 @@ class GuerreroSpec {
   @Test
   def unAndroideIntentaDescansarParaCargarSuKiPeroNoCargaNada() = {
     var result = matiElAndroide.ejecutarMovimiento(cargarKi)
-    assertEquals(10, result._1.ki)
+    assertEquals(10, result.atacante.ki)
   }
 
   @Test
