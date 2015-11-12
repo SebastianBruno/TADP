@@ -104,4 +104,43 @@ object Movement {
     }
   }
 
+
+  case class Onda1(ondas: List[Onda.Value]) extends Movimiento {
+    def apply(estadoBatalla: EstadoBatalla): EstadoBatalla = {
+
+      val atacante = estadoBatalla.atacante
+      val atacado = estadoBatalla.atacado.get
+
+      def aplicarOndas(ondas: List[Onda.Value], estadoBatalla: EstadoBatalla): List[EstadoBatalla] = ondas match {
+        case head :: tail => aplicarOndas(tail, aplicarOnda(head, estadoBatalla))
+        case _ => Nil
+      }
+
+      def aplicarOnda(onda: Onda.Value, estadoBatalla: EstadoBatalla) = {
+
+        if (atacante.ki >= Onda.kiNecesario(onda)) {
+          atacado.especie match {
+            case Monstruo => EstadoBatalla(atacante.disminuirKi(Onda.kiNecesario(onda)), Some(atacado.disminuirKi(Onda.kiNecesario(onda) / 2)))
+            case _ => EstadoBatalla(atacante.disminuirKi(Onda.kiNecesario(onda)), Some(atacado.disminuirKi(Onda.kiNecesario(onda) * 2)))
+          }
+        } else estadoBatalla
+
+      }
+
+      aplicarOndas(ondas, estadoBatalla).last
+    }
+  }
+
+  object Onda extends Enumeration {
+
+    type Onda = Value
+
+    val KameHameHa, Kienzan, Dodonpa = Value
+
+    def kiNecesario(o : Onda.Value) = o match {
+      case KameHameHa => 10
+      case Kienzan => 15
+      case Dodonpa => 19
+    }
+  }
 }
