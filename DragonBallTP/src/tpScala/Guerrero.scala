@@ -32,8 +32,20 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }
 
+  def cambiarNombre(nuevoNombre: String) : Guerrero = {
+    copy(nombre = nuevoNombre)
+  }
+
   def cambiarEspecie(nuevaEspecie: Especie): Guerrero = {
     copy(especie = nuevaEspecie)
+  }
+
+  def cambiarKiMaximo(nuevoKiMaximo: Int): Guerrero = {
+    copy(kiMaximo = nuevoKiMaximo)
+  }
+
+  def agregarMovimientos(nuevosMovimientos: Array[Movimiento]): Guerrero = {
+    copy(movimientos = movimientos ++ nuevosMovimientos)
   }
 
   def convertirseEnMono(): Guerrero = {
