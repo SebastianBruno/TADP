@@ -195,4 +195,15 @@ class MovimientosSpec {
     val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon, Some(atacado))
   }
 
+  @Test
+  def unHumanoRealizaUnAtaqueDeMuchosGolpesNinjaAUnAndroideYMuere = {
+    val atacante = new Guerrero("Krillin", Array[Item](), Array[Movimiento](cargarKi), 10, 15, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](), Array[Movimiento](dejarseFajar), 5, 10, Androide, Consciente)
+
+    val estadoBatalla = atacante.ejecutarMovimiento(MuchosGolpesNinja, Some(atacado))
+    assertEquals(Muerto, estadoBatalla.atacante.estado)
+    assertEquals(0, estadoBatalla.atacante.ki)
+    assertEquals(5, estadoBatalla.atacado.get.ki)
+  }
+
 }

@@ -118,4 +118,14 @@ object Movement {
       }
     }
   }
+
+  case object MuchosGolpesNinja extends Movimiento {
+    def apply(luchadores : EstadoBatalla): EstadoBatalla = {
+      (luchadores.atacante.especie, luchadores.atacado.get.especie) match {
+        case (Humano, Androide) => EstadoBatalla(luchadores.atacante.disminuirKi(10),luchadores.atacado)
+        case _ if luchadores.atacante.ki < luchadores.atacado.get.ki => EstadoBatalla(luchadores.atacante.disminuirKi(20),luchadores.atacado)
+        case _ if luchadores.atacante.ki > luchadores.atacado.get.ki => EstadoBatalla(luchadores.atacante, Some(luchadores.atacado.get.disminuirKi(20)))
+      }
+    }
+  }
 }

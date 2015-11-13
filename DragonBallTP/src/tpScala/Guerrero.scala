@@ -17,7 +17,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 
   def disminuirKi(cuanto: Int): Guerrero =
-    (cuanto > ki) match {
+    (cuanto >= ki) match {
       case true => muere
       case false => this.copy(ki = ki - cuanto)
     }
@@ -53,23 +53,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
       case Saiyajin(_, Some(MonoGigante)) => throw new RuntimeException("Ya es mono!")
       case Saiyajin(true, _) => copy(especie = Saiyajin(true, Option(MonoGigante)), ki = kiMaximo, kiMaximo = kiMaximo * 3)
       case _ => throw new RuntimeException("No puede convertirse en mono!")
-    }
-  }
-
-  def fusionarseCon(otroGuerrero: Guerrero): Guerrero = {
-    (especie, otroGuerrero.especie) match {
-      case (Humano | Saiyajin(_, _) | Namekusein, Humano | Saiyajin(_, _) | Namekusein) => copy(especie = Fusion,
-        nombre = nombre ++ otroGuerrero.nombre, ki = ki + otroGuerrero.ki, kiMaximo = kiMaximo + otroGuerrero.kiMaximo,
-        movimientos = movimientos ++ otroGuerrero.movimientos, items = items ++ otroGuerrero.items) // Agrego los items porque quedaba medio cualquiera sino
-      case _ => throw new RuntimeException("No pueden fusionarse!")
-    }
-  }
-
-  def muchosGolpesNinjaA(atacado: Guerrero): Guerrero = {
-    (especie, atacado.especie) match {
-      case (Humano, Androide) => disminuirKi(10)
-      case _ if this.ki < atacado.ki => disminuirKi(20)
-      case _ if this.ki > atacado.ki => atacado.disminuirKi(20)
     }
   }
 

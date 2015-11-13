@@ -50,13 +50,6 @@ class GuerreroSpec {
     santiElSaiyajin = new Guerrero("Santi", items, movimientos, 4, 40, Androide, Inconsciente)
 
   }
-
-  @Test
-  def unHumanoRealizaUnAtaqueDeMuchosGolpesNinjaAUnAndroideYMuere = {
-    diegoElHumanoInservible = diegoElHumanoInservible.muchosGolpesNinjaA(matiElAndroide)
-    assertEquals(Muerto, diegoElHumanoInservible.estado)
-    assertEquals(0, diegoElHumanoInservible.ki)
-  }
   
   @Test
   def unGuerreroExplotaMuereYLeSacaElDobleDeKiAUnNoAndroide = {
