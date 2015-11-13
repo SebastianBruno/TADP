@@ -2,8 +2,6 @@ package tpScala
 
 import utils.Random
 
-
-
 object Movement {
 
   case class EstadoBatalla(atacante: Guerrero, atacado : Option[Guerrero])
@@ -100,6 +98,34 @@ object Movement {
           }
         }
         case _ => luchadores
+      }
+    }
+  }
+
+
+  case object FusionarseCon extends Movimiento {
+    def apply(luchadores : EstadoBatalla): EstadoBatalla = {
+      (luchadores.atacante.especie, luchadores.atacado.get.especie) match {
+        case (Humano | Saiyajin(_, _) | Namekusein, Humano | Saiyajin(_, _) | Namekusein) =>
+          EstadoBatalla(
+            luchadores.atacante
+              .cambiarNombre(luchadores.atacante.nombre ++ luchadores.atacado.get.nombre)
+              .cambiarEspecie(Fusion)
+              .aumentarKi(luchadores.atacado.get.ki)
+              .cambiarKiMaximo(luchadores.atacado.get.kiMaximo)
+              .agregarMovimientos(luchadores.atacado.get.movimientos)
+            , None)
+        case _ => throw new RuntimeException("No pueden fusionarse!")
+      }
+    }
+  }
+
+  case object MuchosGolpesNinja extends Movimiento {
+    def apply(luchadores: EstadoBatalla): EstadoBatalla = {
+      (luchadores.atacante.especie, luchadores.atacado.get.especie) match {
+        case (Humano, Androide(_)) => EstadoBatalla(luchadores.atacante.disminuirKi(10), luchadores.atacado)
+        case _ if luchadores.atacante.ki < luchadores.atacado.get.ki => EstadoBatalla(luchadores.atacante.disminuirKi(20), luchadores.atacado)
+        case _ if luchadores.atacante.ki > luchadores.atacado.get.ki => EstadoBatalla(luchadores.atacante, Some(luchadores.atacado.get.disminuirKi(20)))
       }
     }
   }

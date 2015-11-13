@@ -17,7 +17,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def aumentarKi(cuanto: Int) = copy(ki = ki + cuanto)
 
   def disminuirKi(cuanto: Int): Guerrero =
-    (cuanto > ki) match {
+    (cuanto >= ki) match {
       case true => muere
       case false  => this.copy(ki = ki - cuanto)
     }
@@ -32,8 +32,20 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }
 
+  def cambiarNombre(nuevoNombre: String) : Guerrero = {
+    copy(nombre = nuevoNombre)
+  }
+
   def cambiarEspecie(nuevaEspecie: Especie): Guerrero = {
     copy(especie = nuevaEspecie)
+  }
+
+  def cambiarKiMaximo(nuevoKiMaximo: Int): Guerrero = {
+    copy(kiMaximo = nuevoKiMaximo)
+  }
+
+  def agregarMovimientos(nuevosMovimientos: Array[Movimiento]): Guerrero = {
+    copy(movimientos = movimientos ++ nuevosMovimientos)
   }
 
   def convertirseEnMono(): Guerrero = {
@@ -44,22 +56,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }
 
-  def fusionarseCon(otroGuerrero: Guerrero): Guerrero = {
-    (especie, otroGuerrero.especie) match {
-      case (Humano | Saiyajin(_, _) | Namekusein, Humano | Saiyajin(_, _) | Namekusein) => copy(especie = Fusion,
-        nombre = nombre ++ otroGuerrero.nombre, ki = ki + otroGuerrero.ki, kiMaximo = kiMaximo + otroGuerrero.kiMaximo,
-        movimientos = movimientos ++ otroGuerrero.movimientos, items = items ++ otroGuerrero.items) // Agrego los items porque quedaba medio cualquiera sino
-      case _ => throw new RuntimeException("No pueden fusionarse!")
-    }
-  }
-
-  def muchosGolpesNinjaA(atacado: Guerrero): Guerrero = {
-    (especie, atacado.especie) match {
-      case (Humano, Androide(_)) => disminuirKi(10)
-      case _ if this.ki < atacado.ki => disminuirKi(20)
-      case _ if this.ki > atacado.ki => atacado.disminuirKi(20)
-    }
-  }
 
   def explotar(atacado: Guerrero): (Guerrero, Guerrero) = {
     val atacadoNew = atacado.especie match {
