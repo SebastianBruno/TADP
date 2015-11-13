@@ -12,7 +12,7 @@ class MovimientosSpec {
   def setUp() = {
     val items = Array[Item]()
     val movimientos = Array[Movimiento]()
-    guerrero = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide, Consciente)
+    guerrero = new Guerrero("Numero 18", items, movimientos, 4, 40, Androide(), Consciente)
   }
 
   @Test
@@ -157,5 +157,51 @@ class MovimientosSpec {
     assertEquals(Consciente, guerrerosResultado.atacante.estado)
   }
 
+
+  @Test
+  def aplicarOndaDisminuyeKiDeAmbosGuerreros = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 20, 40, Humano, Consciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Namekusein, Inconsciente)
+
+    val nuevoEstadoBatalla = atacante.ejecutarMovimiento(Onda(Onda.KameHameHa), Some(atacado))
+
+    assertEquals(nuevoEstadoBatalla.atacante.ki, 10)
+    assertEquals(nuevoEstadoBatalla.atacado.get.ki, 1)
+  }
+
+  @Test
+  def siEsMonstruoSoloLeSacaLaMitadDeLoNormal = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 20, 40, Humano, Consciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Monstruo, Inconsciente)
+
+    val nuevoEstadoBatalla = atacante.ejecutarMovimiento(Onda(Onda.KameHameHa), Some(atacado))
+
+    assertEquals(nuevoEstadoBatalla.atacante.ki, 10)
+    assertEquals(nuevoEstadoBatalla.atacado.get.ki, 16)
+  }
+
+  @Test
+  def atacanteNoPoseeSuficienteKi = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 10, 40, Humano, Consciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Monstruo, Inconsciente)
+
+    val nuevoEstadoBatalla = atacante.ejecutarMovimiento(Onda(Onda.Dodonpa), Some(atacado))
+
+    assertEquals(nuevoEstadoBatalla.atacante.ki, 10)
+    assertEquals(nuevoEstadoBatalla.atacado.get.ki, 21)
+  }
+
+  @Test
+  def siEsAndroideBajaSOlamenteSuBateria = {
+    val atacante = new Guerrero("Picollo", Array.empty, Array.empty , 59, 40, Humano, Consciente)
+    val atacado = new Guerrero("Santi", Array.empty, Array.empty, 21, 40, Androide(29), Inconsciente)
+
+    val nuevoEstadoBatalla = atacante.ejecutarMovimiento(Onda(Onda.Dodonpa), Some(atacado))
+
+    assertEquals(nuevoEstadoBatalla.atacante.ki, 40)
+
+    assertEquals(nuevoEstadoBatalla.atacado.get.ki, 21)
+    assertEquals(nuevoEstadoBatalla.atacado.get.especie.asInstanceOf[Androide].bateria, 10)
+  }
 
 }

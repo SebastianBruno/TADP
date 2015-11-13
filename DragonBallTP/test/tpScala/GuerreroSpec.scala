@@ -21,7 +21,7 @@ class GuerreroSpec {
 
     santiElSaiyajin = new Guerrero("Santi", items, movimientosSanti, 15, 40, Saiyajin(true, None), Inconsciente)
     diegoElHumanoInservible = new Guerrero("Diego", items, movimientosDiego, 5, 10, Humano, Inconsciente)
-    matiElAndroide = new Guerrero("Mati", items, movimientosSanti, 10, 30, Androide, Inconsciente)
+    matiElAndroide = new Guerrero("Mati", items, movimientosSanti, 10, 30, Androide(), Inconsciente)
   }
 
   @Test
@@ -47,7 +47,7 @@ class GuerreroSpec {
     val items = Array[Item]()
     val movimientos = Array[Movimiento](convertirseEnMono)
 
-    santiElSaiyajin = new Guerrero("Santi", items, movimientos, 4, 40, Androide, Inconsciente)
+    santiElSaiyajin = new Guerrero("Santi", items, movimientos, 4, 40, Androide(), Inconsciente)
 
   }
   @Test

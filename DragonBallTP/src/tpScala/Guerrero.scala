@@ -19,7 +19,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def disminuirKi(cuanto: Int): Guerrero =
     (cuanto > ki) match {
       case true => muere
-      case false => this.copy(ki = ki - cuanto)
+      case false  => this.copy(ki = ki - cuanto)
     }
 
   def muere(): Guerrero = copy(ki = 0, estado = Muerto)
@@ -55,7 +55,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
 
   def muchosGolpesNinjaA(atacado: Guerrero): Guerrero = {
     (especie, atacado.especie) match {
-      case (Humano, Androide) => disminuirKi(10)
+      case (Humano, Androide(_)) => disminuirKi(10)
       case _ if this.ki < atacado.ki => disminuirKi(20)
       case _ if this.ki > atacado.ki => atacado.disminuirKi(20)
     }
@@ -64,7 +64,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def explotar(atacado: Guerrero): (Guerrero, Guerrero) = {
     val atacadoNew = atacado.especie match {
       case Namekusein if (ki * 2 >= atacado.ki) => atacado.copy(ki = 1)
-      case Androide => atacado.disminuirKi(ki * 3)
+      case Androide(_) => atacado.disminuirKi(ki * 3)
       case _ => atacado.disminuirKi(ki * 2)
     }
     (muere, atacadoNew)
