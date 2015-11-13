@@ -19,7 +19,7 @@ object Movement {
     def apply(args: EstadoBatalla) = {
       val guerrero = args.atacante
       guerrero.especie match {
-        case Androide => EstadoBatalla(guerrero,args.atacado)
+        case Androide(_) => EstadoBatalla(guerrero, args.atacado)
         case SuperSaiyajin(_ , nivel) if nivel != 0 => EstadoBatalla(guerrero.aumentarKi(nivel * 150),args.atacado)
         case _ => EstadoBatalla(guerrero.aumentarKi(100), args.atacado)
       }
@@ -40,14 +40,14 @@ object Movement {
       }
 
       (arma, atacado.especie) match {
-        case (ArmaRoma, Androide) => EstadoBatalla(atacante, Some(atacado))
+        case (ArmaRoma, Androide(_)) => EstadoBatalla(atacante, Some(atacado))
         case (ArmaRoma, _) => if (atacado.ki < 300) EstadoBatalla(atacante, Some(atacado.cambiarEstado(Some(Inconsciente)))) else EstadoBatalla(atacante, Some(atacado))
         case (ArmaFilosa, Saiyajin(true, Some(MonoGigante))) => EstadoBatalla(atacante, Some(atacado.cambiarEspecie(Saiyajin(false, None)).cambiarEstado(Some(Inconsciente))))
         case (ArmaFilosa, Saiyajin(true, transformacion)) => EstadoBatalla(atacante, Some(atacado.cambiarEspecie(Saiyajin(false, transformacion)).disminuirKi(atacado.ki - 1)))
         case (ArmaFilosa, _) => EstadoBatalla(atacante, Some(atacado.disminuirKi(atacante.ki / 100)))
         case (ArmaFuego(muni), Humano) => EstadoBatalla(atacante, Some(atacado.disminuirKi(20)))
         case (ArmaFuego(muni), Namekusein) => if (atacado.estado == Inconsciente) EstadoBatalla(atacante, Some(atacado.disminuirKi(10))) else EstadoBatalla(atacante, Some(atacado))
-        case (Semilla, Androide) => EstadoBatalla(atacante, Some(atacado))
+        case (Semilla, Androide(_)) => EstadoBatalla(atacante, Some(atacado))
         case (Semilla, _) => EstadoBatalla(atacante, Some(atacado.copy(ki = atacado.kiMaximo)))
       }
     }
@@ -105,29 +105,26 @@ object Movement {
   }
 
 
-  case class Onda1(ondas: List[Onda.Value]) extends Movimiento {
+  case class Onda(onda: Onda.Value) extends Movimiento {
     def apply(estadoBatalla: EstadoBatalla): EstadoBatalla = {
 
       val atacante = estadoBatalla.atacante
       val atacado = estadoBatalla.atacado.get
 
-      def aplicarOndas(ondas: List[Onda.Value], estadoBatalla: EstadoBatalla): List[EstadoBatalla] = ondas match {
-        case head :: tail => aplicarOndas(tail, aplicarOnda(head, estadoBatalla))
-        case _ => Nil
-      }
 
       def aplicarOnda(onda: Onda.Value, estadoBatalla: EstadoBatalla) = {
 
         if (atacante.ki >= Onda.kiNecesario(onda)) {
           atacado.especie match {
             case Monstruo => EstadoBatalla(atacante.disminuirKi(Onda.kiNecesario(onda)), Some(atacado.disminuirKi(Onda.kiNecesario(onda) / 2)))
+            case guerrero:Androide => EstadoBatalla(atacante.disminuirKi(Onda.kiNecesario(onda)), Some(atacado.copy(especie = guerrero.disminuirBateria(Onda.kiNecesario(onda)))))
             case _ => EstadoBatalla(atacante.disminuirKi(Onda.kiNecesario(onda)), Some(atacado.disminuirKi(Onda.kiNecesario(onda) * 2)))
           }
         } else estadoBatalla
 
       }
 
-      aplicarOndas(ondas, estadoBatalla).last
+      aplicarOnda(onda, estadoBatalla)
     }
   }
 

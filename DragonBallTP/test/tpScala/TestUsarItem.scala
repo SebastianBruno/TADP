@@ -10,7 +10,7 @@ class TestUsarItem {
 
   @Before
   def setUp() = {
-    atacante = new Guerrero("Numero 18", Array[Item](ArmaFilosa), Array[Movimiento](), 100, 200, Androide, Consciente)
+    atacante = new Guerrero("Numero 18", Array[Item](ArmaFilosa), Array[Movimiento](), 100, 200, Androide(), Consciente)
     enemigo = new Guerrero("Picollo", Array[Item](), Array[Movimiento](), 100, 200, Namekusein, Consciente)
 
   }
@@ -51,7 +51,7 @@ class TestUsarItem {
   @Test
   def unAtaqueDeArmaRomaNoLeHaceNadaALosAndroides() = {
     atacante = atacante.copy(items =  Array[Item](ArmaRoma))
-    enemigo = enemigo.copy(especie = Androide)
+    enemigo = enemigo.copy(especie = Androide())
     val result = atacante.ejecutarMovimiento(usarItem(ArmaRoma), Some(enemigo))
 
     assertEquals(result.atacado.get.estado, Consciente)

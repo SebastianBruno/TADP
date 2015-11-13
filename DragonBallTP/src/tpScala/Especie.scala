@@ -7,10 +7,17 @@ trait Especie {
   def siguienteNivel(): Especie = ???
 
   def puedoHechizar() = false
-
 }
 
-case object Androide extends Especie
+case class Androide(bateria: Int = 100) extends Especie {
+  def disminuirBateria(cantidad: Int): Androide = {
+    cantidad > bateria match {
+      case true => copy(0)
+      case false => copy(bateria = bateria - cantidad)
+
+    }
+  }
+}
 
 case object Namekusein extends Especie {
   override def puedoHechizar() = true
