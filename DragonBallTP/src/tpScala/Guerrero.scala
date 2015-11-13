@@ -72,14 +72,14 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def tieneItem(item: Item): Boolean = items.contains(item)
   
   def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio): Movimiento = {
-    criterio.apply(EstadoBatalla(this, Some(enemigo)))  
+    criterio.apply(EstadoBatalla(this, Some(enemigo))).get
   }
   
-  def cuantificarResultadoDeCriterio(enemigo: Guerrero, movimiento: Movimiento): Int = {
+  def simularMovimiento(enemigo: Guerrero, movimiento: Movimiento): EstadoBatalla = {
     val atacanteAux = this
     val enemigoAux = enemigo // La idea de los auxiliares, es no causar efecto colateral en los reales
     atacanteAux.ejecutarMovimiento(movimiento, Some(enemigoAux))
-    enemigo.ki - enemigoAux.ki
+    EstadoBatalla(atacanteAux, Some(enemigoAux))
   }
   
 }
