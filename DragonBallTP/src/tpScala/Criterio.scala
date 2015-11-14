@@ -2,6 +2,7 @@ package tpScala
 
 import tpScala.Movement.{ EstadoBatalla, Movimiento }
 import tpScala.Movement.EstadoBatalla
+import utils.Random
 
 object Criteria {
 
@@ -43,6 +44,33 @@ object Criteria {
         }
       }
       Some(movimientoElegido)
+    }
+  }
+
+  case object movimientoQueQuitaMenosItems extends Criterio {
+    def apply(guerreros: EstadoBatalla) = {
+      val atacante = guerreros.atacante
+      val atacado = guerreros.atacado.get
+      var movimientoElegido = atacante.movimientos.head
+      var itemsMinimos = atacado.items.length - atacante.simularMovimiento(atacado, atacante.movimientos.head).atacado.get.items.length
+
+      atacante.movimientos.foreach { mov =>
+        val itemsPerdidos = atacado.items.length - atacante.simularMovimiento(atacado, mov).atacado.get.items.length
+        if (itemsPerdidos < itemsMinimos) {
+          movimientoElegido = mov
+          itemsMinimos = itemsPerdidos
+        }
+      }
+      Some(movimientoElegido)
+    }
+  }
+
+  case object movimientoKrillin extends Criterio {
+    def apply(guerreros: EstadoBatalla) = {
+      val random = scala.util.Random
+      val atacante = guerreros.atacante
+      val aplicoA = random.nextInt(atacante.movimientos.length)
+      Some(atacante.movimientos(aplicoA))
     }
   }
 
