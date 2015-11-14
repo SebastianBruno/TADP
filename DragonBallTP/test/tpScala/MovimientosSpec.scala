@@ -162,9 +162,10 @@ class MovimientosSpec {
     val items = Array[Item]()
 
     val atacante = new Guerrero("Goku", items, Array[Movimiento](cargarKi), 15, 40, Saiyajin(true, None), Inconsciente)
-    val atacado = new Guerrero("Krillin", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Inconsciente)
+    val amigo = new Guerrero("Krillin", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Inconsciente)
+    val atacado = new Guerrero("Ten Shin Han", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Inconsciente)
 
-    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon, Some(atacado))
+    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon(amigo), Some(atacado))
 
     assertEquals("Goku", estadoBatalla.atacante.nombre)
     assertFalse(estadoBatalla.atacante.movimientos contains dejarseFajar)
@@ -177,9 +178,9 @@ class MovimientosSpec {
     val items = Array[Item]()
 
     val atacante = new Guerrero("Goku", items, Array[Movimiento](cargarKi), 15, 40, Saiyajin(true, None), Consciente)
-    val atacado = new Guerrero("Krillin", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Consciente)
-
-    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon, Some(atacado))
+    val amigo = new Guerrero("Krillin", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Consciente)
+    val atacado = new Guerrero("Ten Shin Han", items, Array[Movimiento](dejarseFajar), 5, 10, Humano, Inconsciente)
+    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon(amigo), Some(atacado))
 
     assertEquals("GokuKrillin", estadoBatalla.atacante.nombre)
     assertTrue(estadoBatalla.atacante.movimientos contains dejarseFajar)
@@ -190,9 +191,9 @@ class MovimientosSpec {
   @Test(expected = classOf[RuntimeException])
   def unSaiyajinNoLograFusionarseConUnAndroide {
     val atacante = new Guerrero("Goku", Array[Item](), Array[Movimiento](cargarKi), 15, 40, Saiyajin(true, None), Consciente)
-    val atacado = new Guerrero("Numero 18", Array[Item](), Array[Movimiento](dejarseFajar), 5, 10, Androide(), Consciente)
+    val amigo = new Guerrero("Numero 18", Array[Item](), Array[Movimiento](dejarseFajar), 5, 10, Androide(), Consciente)
 
-    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon, Some(atacado))
+    val estadoBatalla = atacante.ejecutarMovimiento(FusionarseCon(amigo), None)
   }
 
   @Test

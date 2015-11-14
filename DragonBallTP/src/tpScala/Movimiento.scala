@@ -93,17 +93,17 @@ object Movement {
   }
 
 
-  case object FusionarseCon extends Movimiento {
+  case class FusionarseCon(amigo: Guerrero) extends Movimiento {
     def apply(luchadores : EstadoBatalla): EstadoBatalla = {
-      (luchadores.atacante.especie, luchadores.atacado.get.especie) match {
+      (luchadores.atacante.especie, amigo.especie) match {
         case (Humano | Saiyajin(_, _) | Namekusein, Humano | Saiyajin(_, _) | Namekusein) =>
           EstadoBatalla(
             luchadores.atacante
-              .cambiarNombre(luchadores.atacante.nombre ++ luchadores.atacado.get.nombre)
+              .cambiarNombre(luchadores.atacante.nombre ++ amigo.nombre)
               .cambiarEspecie(Fusion)
-              .aumentarKi(luchadores.atacado.get.ki)
-              .cambiarKiMaximo(luchadores.atacado.get.kiMaximo)
-              .agregarMovimientos(luchadores.atacado.get.movimientos)
+              .aumentarKi(amigo.ki)
+              .cambiarKiMaximo(amigo.kiMaximo)
+              .agregarMovimientos(amigo.movimientos)
             , None)
         case _ => throw new RuntimeException("No pueden fusionarse!")
       }
