@@ -49,24 +49,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     copy(movimientos = movimientos ++ nuevosMovimientos)
   }
 
-  def convertirseEnMono(): Guerrero = {
-    especie match {
-      case Saiyajin(_, Some(MonoGigante)) => throw new RuntimeException("Ya es mono!")
-      case Saiyajin(true, _) => copy(especie = Saiyajin(true, Option(MonoGigante)), ki = kiMaximo, kiMaximo = kiMaximo * 3)
-      case _ => throw new RuntimeException("No puede convertirse en mono!")
-    }
-  }
-
-
-  def explotar(atacado: Guerrero): (Guerrero, Guerrero) = {
-    val atacadoNew = atacado.especie match {
-      case Namekusein if (ki * 2 >= atacado.ki) => atacado.copy(ki = 1)
-      case Androide(_) => atacado.disminuirKi(ki * 3)
-      case _ => atacado.disminuirKi(ki * 2)
-    }
-    (muere, atacadoNew)
-  }
-
   def subirAKiMaximo() = copy(ki = kiMaximo)
 
   def tieneItem(item: Item): Boolean = items.contains(item)

@@ -252,4 +252,33 @@ class MovimientosSpec {
     assertEquals(nuevoEstadoBatalla.atacado.get.especie.asInstanceOf[Androide].bateria, 10)
   }
 
+  @Test
+  def convertirseEnMonoOK(): Unit = {
+    val atacante = new Guerrero("Goku", Array[Item](FotoLuna), Array[Movimiento](cargarKi), 15, 40, Saiyajin(true, None), Consciente)
+
+    val estadoBatalla = atacante.ejecutarMovimiento(ConvertirseEnMono, None)
+
+    assertEquals(estadoBatalla.atacante.especie, Saiyajin(true,Some(MonoGigante)))
+  }
+
+  @Test
+  def testNoSeConvierteEnMonoSinFotoDeLaLuna(): Unit = {
+    val atacante = new Guerrero("Goku", Array[Item](), Array[Movimiento](cargarKi), 15, 40, Saiyajin(true, None), Consciente)
+
+    val estadoBatalla = atacante.ejecutarMovimiento(ConvertirseEnMono, None)
+
+    assertEquals(estadoBatalla.atacante.especie, Saiyajin(true, None))
+  }
+
+  @Test
+  def unGuerreroExplotaMuereYLeSacaElDobleDeKiAUnNoAndroide = {
+    val atacante = new Guerrero("Goku", Array[Item](), Array[Movimiento](Explotar), 5, 40, Saiyajin(true, None), Consciente)
+    val atacado = new Guerrero("Numero 18", Array.empty, Array.empty, 20, 40, Androide(35), Inconsciente)
+
+    val estadoBatalla = atacante.ejecutarMovimiento(Explotar, Some(atacado))
+
+    assertEquals(Muerto, estadoBatalla.atacante.estado)
+    assertEquals(5, estadoBatalla.atacado.get.ki)
+  }
+
 }

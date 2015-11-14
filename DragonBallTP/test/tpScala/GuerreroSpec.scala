@@ -2,7 +2,7 @@ package tpScala
 
 import org.junit.Assert._
 import org.junit.{Before, Test}
-import tpScala.Movement.{Movimiento, cargarKi, convertirseEnMono, dejarseFajar}
+import tpScala.Movement.{Movimiento, cargarKi, dejarseFajar}
 class GuerreroSpec {
   var santiElSaiyajin: Guerrero = null
   var diegoElHumanoInservible: Guerrero = null
@@ -42,19 +42,4 @@ class GuerreroSpec {
     assertEquals(4, guerrero.ki)*/
   }
 
-  @Test
-  def convertirseEnMonoOK(): Unit = {
-    val items = Array[Item]()
-    val movimientos = Array[Movimiento](convertirseEnMono)
-
-    santiElSaiyajin = new Guerrero("Santi", items, movimientos, 4, 40, Androide(), Inconsciente)
-
-  }
-  
-  @Test
-  def unGuerreroExplotaMuereYLeSacaElDobleDeKiAUnNoAndroide = {
-    val peleadores = diegoElHumanoInservible.explotar(santiElSaiyajin)
-    assertEquals(Muerto, peleadores._1.estado)
-    assertEquals(5, peleadores._2.ki)
-  }
 }

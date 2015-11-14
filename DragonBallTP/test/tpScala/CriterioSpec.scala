@@ -38,7 +38,7 @@ class CriterioSpec {
 
   @Test
   def KrillinEligeACualquiera() {
-    val krillin = new Guerrero("Krillin", Array[Item](FotoLuna), Array[Movimiento](convertirseEnMono, MuchosGolpesNinja), 50, 90, Saiyajin(true, None), Consciente)
+    val krillin = new Guerrero("Krillin", Array[Item](FotoLuna), Array[Movimiento](ConvertirseEnMono, MuchosGolpesNinja), 50, 90, Saiyajin(true, None), Consciente)
     val atacado = new Guerrero("Vegeta", Array[Item](), Array[Movimiento](dejarseFajar), 20, 70, Monstruo, Consciente)
 
     assertTrue(krillin.movimientos contains krillin.movimientoMasEfectivoContra(atacado)(movimientoKrillin))

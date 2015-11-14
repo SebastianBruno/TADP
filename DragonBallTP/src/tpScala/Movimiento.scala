@@ -55,16 +55,6 @@ object Movement {
     }
   }
 
-  case object convertirseEnMono extends Movimiento{
-    def apply(args: EstadoBatalla) = {
-      val guerrero = args.atacante
-      guerrero.especie match {
-        case Saiyajin(true, _) if guerrero.tieneItem(FotoLuna) => EstadoBatalla(guerrero.convertirseEnMono(),args.atacado)
-        case _ => throw new RuntimeException("No puede convertirse en mono!")
-      }
-    }
-  }
-
   case object convertirseEnSuperSaiyajin extends Movimiento {
     def apply(args: EstadoBatalla) = {
       val guerrero = args.atacante
@@ -151,6 +141,39 @@ object Movement {
       }
 
       aplicarOnda(onda, estadoBatalla)
+    }
+  }
+
+  case object ConvertirseEnMono extends Movimiento {
+    def apply(estadoBatalla: EstadoBatalla): EstadoBatalla = {
+      val atacante = estadoBatalla.atacante
+      if(!atacante.tieneItem(FotoLuna)) {
+        return estadoBatalla
+      }
+
+      atacante.especie match {
+        case Saiyajin(_, Some(MonoGigante)) => estadoBatalla
+        case Saiyajin(true, _) =>
+          EstadoBatalla(atacante
+          .cambiarEspecie(Saiyajin(true, Option(MonoGigante)))
+          .cambiarKiMaximo(atacante.kiMaximo * 3)
+          .aumentarKi(atacante.kiMaximo - atacante.ki), estadoBatalla.atacado)
+        case _ => estadoBatalla
+      }
+    }
+  }
+
+  case object Explotar extends Movimiento {
+    def apply(estadoBatalla: EstadoBatalla): EstadoBatalla = {
+      val atacado = estadoBatalla.atacado.get
+      val atacante = estadoBatalla.atacante
+      val atacadoNew = atacado.especie match {
+        case Namekusein if (atacante.ki * 2 >= atacado.ki) => atacado.disminuirKi(atacado.ki - 1)
+        case Androide(_) => atacado.disminuirKi(atacante.ki * 3)
+        case _ => atacado.disminuirKi(atacante.ki * 2)
+      }
+
+      EstadoBatalla(atacante.muere, Some(atacadoNew))
     }
   }
 
