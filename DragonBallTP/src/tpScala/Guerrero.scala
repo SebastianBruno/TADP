@@ -78,10 +78,9 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def simularMovimiento(enemigo: Guerrero, movimiento: Movimiento): EstadoBatalla = {
     val atacanteAux = this
     val enemigoAux = enemigo // La idea de los auxiliares, es no causar efecto colateral en los reales
-    atacanteAux.ejecutarMovimiento(movimiento, Some(enemigoAux))
-    EstadoBatalla(atacanteAux, Some(enemigoAux))
-  }
-  
+    val estadoBatalla = atacanteAux.ejecutarMovimiento(movimiento, Some(enemigoAux))
+    EstadoBatalla(estadoBatalla.atacante, Some(estadoBatalla.atacado.get))
+  } 
 }
 
 
