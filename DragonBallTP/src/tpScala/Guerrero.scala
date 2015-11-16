@@ -1,7 +1,7 @@
 package tpScala
 
 import tpScala.Movement.{EstadoBatalla, Movimiento}
-import tpScala.Criteria.Criterio
+import tpScala.Criteria.{Criterio}
 
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
@@ -53,16 +53,23 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
 
   def tieneItem(item: Item): Boolean = items.contains(item)
   
-  def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio): Movimiento = {
-    criterio.apply(EstadoBatalla(this, Some(enemigo))).get
-  }
-  
   def simularMovimiento(enemigo: Guerrero, movimiento: Movimiento): EstadoBatalla = {
     val atacanteAux = this
     val enemigoAux = enemigo // La idea de los auxiliares, es no causar efecto colateral en los reales
     val estadoBatalla = atacanteAux.ejecutarMovimiento(movimiento, Some(enemigoAux))
     EstadoBatalla(estadoBatalla.atacante, Some(estadoBatalla.atacado.get))
-  } 
+  }
+
+  def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio) : Option[Movimiento] = {
+    var resultadoSimulaciones = for  {
+      movimiento <- movimientos
+    } yield (movimiento, criterio(ejecutarMovimiento(movimiento, Some(enemigo))))
+
+    var movimiento = resultadoSimulaciones.foldLeft(resultadoSimulaciones.head)((a, b) =>if(a._2 > b._2) a else b)._1
+
+    return Option(movimiento)
+
+  }
 }
 
 
