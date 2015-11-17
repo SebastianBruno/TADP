@@ -1,7 +1,7 @@
 package tpScala
 
 import tpScala.Movement.{EstadoBatalla, Movimiento}
-import tpScala.Criteria.{Criterio}
+import tpScala.Criteria._
 
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
     movimientos: Array[Movimiento] = Array.empty, ki: Int, kiMaximo: Int,
@@ -69,6 +69,17 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
 
     return Option(movimiento)
 
+  }
+  
+  def pelearRound(movimiento: Movimiento)(enemigo: Guerrero) :EstadoBatalla = {
+    //Primer golpe
+    var luegoPrimerGolpe = ejecutarMovimiento(movimiento, Some(enemigo))
+    //Movimiento mas efectivo del atacado
+    var movimientoAtacado = enemigo.movimientoMasEfectivoContra(luegoPrimerGolpe.atacado.get)(MayorKi)
+    var luegoSegundoGolpe = luegoPrimerGolpe.atacado.get.ejecutarMovimiento(movimiento, Some(luegoPrimerGolpe.atacante))
+    
+    //Devolver con el orden correcto
+    return EstadoBatalla(luegoSegundoGolpe.atacado.get,Some(luegoSegundoGolpe.atacante))
   }
 }
 

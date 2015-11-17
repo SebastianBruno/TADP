@@ -282,4 +282,26 @@ class MovimientosSpec {
     assertEquals(5, estadoBatalla.atacado.get.ki)
   }
 
+  @Test
+  def unRoundDondeAmbosCarganKi = {
+    val atacante = new Guerrero("Goku", Array[Item](), Array[Movimiento](cargarKi), 10, 400, Saiyajin(true, None), Consciente)
+    val atacado = new Guerrero("Numero 18", Array.empty, Array[Movimiento](cargarKi), 20, 400, Saiyajin(true, None), Consciente)
+
+    val estadoBatalla = atacante.pelearRound(cargarKi)(atacado)
+
+    assertEquals(110, estadoBatalla.atacante.ki)
+    assertEquals(120, estadoBatalla.atacado.get.ki)
+  }
+  
+  @Test
+  def unRoundConArmasDeFuego = {
+    val atacante = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 50, 400, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 30, 400, Humano, Consciente)
+
+    val estadoBatalla = atacante.pelearRound(usarItem(ArmaFuego(10)))(atacado)
+
+    assertEquals(30, estadoBatalla.atacante.ki)
+    assertEquals(10, estadoBatalla.atacado.get.ki)
+  }
+  
 }

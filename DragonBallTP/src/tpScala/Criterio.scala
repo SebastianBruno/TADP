@@ -31,4 +31,10 @@ object Criteria {
       }
     }
   }
+  
+  case object MayorKi extends Criterio {
+    def apply(estadoBatalla: EstadoBatalla): Int = {
+      return estadoBatalla.atacante.ki 
+    }
+  }
 }
