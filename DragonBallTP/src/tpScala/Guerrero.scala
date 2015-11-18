@@ -1,6 +1,6 @@
 package tpScala
 
-import tpScala.Movement.{EstadoBatalla, Movimiento}
+import tpScala.Movement.{ EstadoBatalla, Movimiento }
 import tpScala.Criteria._
 
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
@@ -20,7 +20,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def disminuirKi(cuanto: Int): Guerrero =
     (cuanto >= ki) match {
       case true => muere
-      case false  => this.copy(ki = ki - cuanto)
+      case false => this.copy(ki = ki - cuanto)
     }
 
   def muere(): Guerrero = copy(ki = 0, estado = Muerto)
@@ -33,7 +33,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     }
   }
 
-  def cambiarNombre(nuevoNombre: String) : Guerrero = {
+  def cambiarNombre(nuevoNombre: String): Guerrero = {
     copy(nombre = nuevoNombre)
   }
 
@@ -52,7 +52,7 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   def subirAKiMaximo() = copy(ki = kiMaximo)
 
   def tieneItem(item: Item): Boolean = items.contains(item)
-  
+
   def simularMovimiento(enemigo: Guerrero, movimiento: Movimiento): EstadoBatalla = {
     val atacanteAux = this
     val enemigoAux = enemigo // La idea de los auxiliares, es no causar efecto colateral en los reales
@@ -60,27 +60,43 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     EstadoBatalla(estadoBatalla.atacante, Some(estadoBatalla.atacado.get))
   }
 
-  def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio) : Option[Movimiento] = {
-    var resultadoSimulaciones = for  {
+  def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio): Option[Movimiento] = {
+    var resultadoSimulaciones = for {
       movimiento <- movimientos
     } yield (movimiento, criterio(ejecutarMovimiento(movimiento, Some(enemigo))))
 
-    var movimiento = resultadoSimulaciones.foldLeft(resultadoSimulaciones.head)((a, b) =>if(a._2 > b._2) a else b)._1
+    var movimiento = resultadoSimulaciones.foldLeft(resultadoSimulaciones.head)((a, b) => if (a._2 > b._2) a else b)._1
 
     return Option(movimiento)
 
   }
-  
-  def pelearRound(movimiento: Movimiento)(enemigo: Guerrero) :EstadoBatalla = {
+
+  def pelearRound(movimiento: Movimiento)(enemigo: Guerrero): EstadoBatalla = {
     //Primer golpe
     var luegoPrimerGolpe = ejecutarMovimiento(movimiento, Some(enemigo))
     //Movimiento mas efectivo del atacado
     var movimientoAtacado = enemigo.movimientoMasEfectivoContra(luegoPrimerGolpe.atacado.get)(MayorKi)
     var luegoSegundoGolpe = luegoPrimerGolpe.atacado.get.ejecutarMovimiento(movimiento, Some(luegoPrimerGolpe.atacante))
-    
+
     //Devolver con el orden correcto
-    return EstadoBatalla(luegoSegundoGolpe.atacado.get,Some(luegoSegundoGolpe.atacante))
+    return EstadoBatalla(luegoSegundoGolpe.atacado.get, Some(luegoSegundoGolpe.atacante))
   }
+
+  def planDeAtaqueContra(enemigo: Guerrero, cantidadDeRounds: Int)(unCriterio: Criterio): Option[Array[Movimiento]] = {
+    var planDeAtaque: Array[Movimiento] = Array()
+    var movimiento = movimientoMasEfectivoContra(enemigo)(unCriterio)
+    if (movimiento == null) return None
+    planDeAtaque = planDeAtaque ++ movimiento
+    var estadoBatalla = pelearRound(movimiento.get)(enemigo)
+    for (i <- 1 to (cantidadDeRounds - 1)) {
+      movimiento = estadoBatalla.atacante.movimientoMasEfectivoContra(estadoBatalla.atacado.get)(unCriterio)
+      if (movimiento == null) return None
+      estadoBatalla = estadoBatalla.atacante.pelearRound(movimiento.get)(estadoBatalla.atacado.get)
+      planDeAtaque = planDeAtaque ++ movimiento
+    }
+    return Option(planDeAtaque)
+  }
+
 }
 
 

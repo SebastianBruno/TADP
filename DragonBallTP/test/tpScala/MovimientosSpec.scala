@@ -4,6 +4,8 @@ import org.junit.Assert._
 import org.junit.{Test, Before}
 import tpScala.Movement._
 import utils.RandomFaked
+import tpScala.Criteria.DejarFueraDeCombateAlEnemigo
+import tpScala.Criteria.MayorKi
 
 class MovimientosSpec {
   var guerrero: Guerrero = null
@@ -302,6 +304,24 @@ class MovimientosSpec {
 
     assertEquals(30, estadoBatalla.atacante.ki)
     assertEquals(10, estadoBatalla.atacado.get.ki)
+  }
+  
+  @Test
+  def obtengoElPlanDeAtaqueConCriterioDejarFueraDeCombate = {
+    val atacante = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento](Onda(Onda.KameHameHa), MuchosGolpesNinja), 250, 400, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 100, 400, Humano, Consciente)
+    val planDeAtaque = atacante.planDeAtaqueContra(atacado, 2)(DejarFueraDeCombateAlEnemigo)
+    assertEquals(MuchosGolpesNinja, planDeAtaque.get(0))
+    assertEquals(MuchosGolpesNinja, planDeAtaque.get(1))
+  }
+  
+  @Test
+  def obtengoElPlanDeAtaqueConCriterioMayorKi = {
+    val atacante = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento](Onda(Onda.KameHameHa), MuchosGolpesNinja, cargarKi), 250, 250, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 100, 400, Humano, Consciente)
+    val planDeAtaque = atacante.planDeAtaqueContra(atacado, 2)(MayorKi)
+    assertEquals(cargarKi, planDeAtaque.get(0))
+    assertEquals(cargarKi, planDeAtaque.get(1))
   }
   
 }
