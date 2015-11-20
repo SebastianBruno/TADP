@@ -5,3 +5,6 @@
 classes
 *.iml
 out/
+.metadata
+target
+project
