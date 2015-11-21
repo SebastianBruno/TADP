@@ -1,6 +1,6 @@
 package tpScala
 
-import tpScala.Movement.{ EstadoBatalla, Movimiento }
+import tpScala.Movement.{ EstadoBatalla, ResultadoPelea,Ganador,SiguenPeleando, Movimiento }
 import tpScala.Criteria._
 
 case class Guerrero(nombre: String, items: Array[Item] = Array(),
@@ -97,6 +97,21 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
     return Option(planDeAtaque)
   }
 
+  def pelearContra(enemigo :Guerrero)(plan :Array[Movimiento]) :ResultadoPelea = {
+    //Chequear que el plan no esté vacio    
+    if (plan.size == 0) return SiguenPeleando(this,enemigo) 
+    
+    //Ejecutar round
+    val resultadoRound :EstadoBatalla = this.pelearRound(plan.head)(enemigo)
+    
+    //Si alguno murió, devolver el ganador
+    (resultadoRound.atacante.estado,resultadoRound.atacado.get.estado) match{
+      case (_,Muerto) => return Ganador(this)
+      case (Muerto,_) => return Ganador(enemigo)
+    //Sino, seguir
+      case _ => return resultadoRound.atacante.pelearContra(resultadoRound.atacado.get)(plan.tail)
+    }   
+  }
 }
 
 

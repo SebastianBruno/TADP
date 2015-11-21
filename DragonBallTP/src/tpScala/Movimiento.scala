@@ -5,7 +5,10 @@ import utils.Random
 object Movement {
 
   case class EstadoBatalla(atacante: Guerrero, atacado : Option[Guerrero])
-
+  abstract class ResultadoPelea
+  case class Ganador(ganador: Guerrero) extends ResultadoPelea
+  case class SiguenPeleando(atacante: Guerrero, atacado :Guerrero) extends ResultadoPelea
+  
   type Movimiento = EstadoBatalla => EstadoBatalla
   type Accion = (Guerrero, Guerrero) => List[Guerrero]
 

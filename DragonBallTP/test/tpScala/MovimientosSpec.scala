@@ -324,4 +324,42 @@ class MovimientosSpec {
     assertEquals(cargarKi, planDeAtaque.get(1))
   }
   
+  @Test
+  def peleaConCriterioDejarFueraDeCombateGanaAtacante = {
+    val atacante = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento](Onda(Onda.KameHameHa), MuchosGolpesNinja), 250, 400, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 100, 400, Humano, Consciente)
+    val planDeAtaque = atacante.planDeAtaqueContra(atacado, 5)(DejarFueraDeCombateAlEnemigo)
+    val resultado: ResultadoPelea = atacante.pelearContra(atacado)(planDeAtaque.get)
+    
+    resultado match {
+      case Ganador(ganador) => assertEquals(ganador.nombre,"Goku")
+      case _ => assertEquals(1, 2)
+    }  
+  }
+    
+  @Test
+  def peleaConCriterioDejarFueraDeCombateGanaAtacado = {
+    val atacado = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento](Onda(Onda.KameHameHa), MuchosGolpesNinja), 250, 400, Humano, Consciente)
+    val atacante = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](usarItem(ArmaFuego(10))), 100, 400, Humano, Consciente)
+    val planDeAtaque = atacante.planDeAtaqueContra(atacado, 5)(DejarFueraDeCombateAlEnemigo)
+    val resultado: ResultadoPelea = atacante.pelearContra(atacado)(planDeAtaque.get)
+    
+    resultado match {
+      case Ganador(ganador) => assertEquals(ganador.nombre,"Goku")
+      case _ => assertEquals(1, 2)
+    } 
+  }
+    
+  @Test
+  def peleaConCriterioMayorKiSiguenPeleando = {
+    val atacante = new Guerrero("Goku", Array[Item](ArmaFuego(10)), Array[Movimiento]( cargarKi), 250, 250, Humano, Consciente)
+    val atacado = new Guerrero("Numero 18", Array[Item](ArmaFuego(10)), Array[Movimiento](cargarKi), 100, 400, Humano, Consciente)
+    val planDeAtaque = atacante.planDeAtaqueContra(atacado, 2)(MayorKi)
+    val resultado: ResultadoPelea = atacante.pelearContra(atacado)(planDeAtaque.get)
+    
+    resultado match {
+      case SiguenPeleando(_,peleador) => assertEquals(peleador.ki,300)
+      case _ => assertEquals(1, 2)
+    } 
+  }
 }
