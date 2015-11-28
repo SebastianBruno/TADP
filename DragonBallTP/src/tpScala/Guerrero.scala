@@ -53,13 +53,6 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
 
   def tieneItem(item: Item): Boolean = items.contains(item)
 
-  def simularMovimiento(enemigo: Guerrero, movimiento: Movimiento): EstadoBatalla = {
-    val atacanteAux = this
-    val enemigoAux = enemigo // La idea de los auxiliares, es no causar efecto colateral en los reales
-    val estadoBatalla = atacanteAux.ejecutarMovimiento(movimiento, Some(enemigoAux))
-    EstadoBatalla(estadoBatalla.atacante, Some(estadoBatalla.atacado.get))
-  }
-
   def movimientoMasEfectivoContra(enemigo: Guerrero)(criterio: Criterio): Option[Movimiento] = {
     var resultadoSimulaciones = for {
       movimiento <- movimientos
@@ -98,13 +91,13 @@ case class Guerrero(nombre: String, items: Array[Item] = Array(),
   }
 
   def pelearContra(enemigo :Guerrero)(plan :Array[Movimiento]) :ResultadoPelea = {
-    //Chequear que el plan no esté vacio    
+    //Chequear que el plan no esta vacio
     if (plan.size == 0) return SiguenPeleando(this,enemigo) 
     
     //Ejecutar round
     val resultadoRound :EstadoBatalla = this.pelearRound(plan.head)(enemigo)
     
-    //Si alguno murió, devolver el ganador
+    //Si alguno murio, devolver el ganador
     (resultadoRound.atacante.estado,resultadoRound.atacado.get.estado) match{
       case (_,Muerto) => return Ganador(this)
       case (Muerto,_) => return Ganador(enemigo)
